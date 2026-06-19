@@ -1,0 +1,1947 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Ticchien · Dương Chí Hướng — Full-stack & Creative Developer</title>
+<meta name="description" content="Ticchien (Dương Chí Hướng) — Full-stack &amp; Creative Developer based in Saigon, Vietnam. AI engineer, data analyst, video editor. 50+ shipped projects since 2022." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300..600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          serif:   ['"Instrument Serif"', 'Georgia', 'serif'],
+          mono:    ['"Geist Mono"', 'ui-monospace', 'monospace'],
+        },
+        colors: {
+          ink:    '#0A0810',
+          night:  '#14111B',
+          mist:   '#1F1A2A',
+          ivory:  '#F4EDDC',
+          son:    '#E63946',
+          vang:   '#F4C430',
+          ngoc:   '#6BD4B8',
+          haze:   '#A89DB6',
+          fog:    '#5C5468',
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+:root{
+  --ink:#0A0810;
+  --night:#14111B;
+  --mist:#1F1A2A;
+  --ivory:#F4EDDC;
+  --son:#E63946;
+  --vang:#F4C430;
+  --ngoc:#6BD4B8;
+  --haze:#A89DB6;
+  --fog:#5C5468;
+  --hair:  rgba(244,237,220,0.08);
+  --hair-2:rgba(244,237,220,0.18);
+  --glass:rgba(244,237,220,0.04);
+}
+
+*{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+html, body{ background:var(--ink); color:var(--ivory); }
+body{
+  font-family:'Bricolage Grotesque', system-ui, sans-serif;
+  font-variation-settings:"opsz" 16, "wdth" 100;
+  overflow-x:hidden;
+}
+::selection{ background:var(--son); color:var(--ivory); }
+::-webkit-scrollbar{ width:0; height:0; }
+
+/* Display tightening */
+.font-display{
+  font-feature-settings:"ss01","ss02","ss03";
+  font-variation-settings:"opsz" 96, "wdth" 100;
+}
+.font-display-tight{ letter-spacing:-0.045em; }
+
+
+/* Atmospheric background — "Saigon at night" */
+.bg-saigon{
+  background:
+    radial-gradient(78% 60% at 76% 16%, rgba(230,57,70,.22), transparent 60%),
+    radial-gradient(46% 38% at 14% 78%, rgba(244,196,48,.16), transparent 60%),
+    radial-gradient(40% 30% at 90% 92%, rgba(107,212,184,.10), transparent 60%),
+    radial-gradient(60% 40% at 50% 50%, rgba(20,17,27,.6), transparent 70%),
+    var(--ink);
+}
+
+/* Film grain */
+.grain::before{
+  content:''; position:fixed; inset:-50%; pointer-events:none; z-index:90;
+  mix-blend-mode:overlay; opacity:.07;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.95  0 0 0 0 0.93  0 0 0 0 0.86  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+  animation: grainShift 7s steps(8) infinite;
+}
+@keyframes grainShift{
+  0%{transform:translate(0,0)} 20%{transform:translate(-3%,2%)} 40%{transform:translate(2%,-1%)}
+  60%{transform:translate(-1%,3%)} 80%{transform:translate(3%,1%)} 100%{transform:translate(0,0)}
+}
+
+/* Custom cursor */
+.cursor{ position:fixed; left:0; top:0; width:8px; height:8px; border-radius:999px; background:var(--ivory); pointer-events:none; z-index:200; transform:translate(-50%,-50%); mix-blend-mode:difference; transition: width .3s, height .3s, background .25s; }
+.cursor-ring{ position:fixed; left:0; top:0; width:38px; height:38px; border-radius:999px; border:1px solid rgba(244,237,220,.6); pointer-events:none; z-index:199; transform:translate(-50%,-50%); mix-blend-mode:difference; }
+.is-hover .cursor{ width:56px; height:56px; background:var(--vang); }
+.is-hover .cursor-ring{ opacity:0; }
+@media (max-width: 900px){ .cursor, .cursor-ring{ display:none; } }
+
+/* Three.js canvas — fixed full screen behind everything */
+#crystal{
+  position:fixed; inset:0; width:100vw; height:100vh; z-index:1; pointer-events:none;
+}
+
+/* All content stays above the canvas */
+main, header, .rail, footer, #loader{ position:relative; z-index:5; }
+
+/* ─── LIQUID GLASS card ─── */
+.glass{
+  position:relative;
+  background:linear-gradient(135deg, rgba(244,237,220,0.06), rgba(244,237,220,0.015) 60%);
+  backdrop-filter: blur(22px) saturate(1.35);
+  -webkit-backdrop-filter: blur(22px) saturate(1.35);
+  border:1px solid rgba(244,237,220,0.08);
+  border-radius:22px;
+  overflow:hidden;
+}
+.glass::before{
+  content:''; position:absolute; inset:0; pointer-events:none; border-radius:inherit;
+  background:linear-gradient(135deg, rgba(255,255,255,0.10), transparent 30%, transparent 70%, rgba(255,255,255,0.04));
+}
+.glass::after{
+  content:''; position:absolute; left:14%; right:14%; top:0; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+  pointer-events:none;
+}
+.glass-iri{
+  position:relative; border-radius:22px;
+}
+.glass-iri::before{
+  content:''; position:absolute; inset:-1px; border-radius:inherit; z-index:-1;
+  background: conic-gradient(from var(--a, 0deg), #E63946, #F4C430, #6BD4B8, #5AC8FA, #E63946);
+  filter: blur(2px);
+  animation: spin 12s linear infinite;
+}
+@keyframes spin{ to { --a: 360deg; transform: rotate(0); } }
+
+/* Hairlines */
+.hairline{ height:1px; background:linear-gradient(90deg, transparent, var(--hair-2) 12%, var(--hair-2) 88%, transparent); }
+.hairline-v{ width:1px; background:linear-gradient(180deg, transparent, var(--hair-2) 12%, var(--hair-2) 88%, transparent); }
+
+/* VN flag star */
+.vn-star{
+  display:inline-block; width:1em; height:1em;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  background: var(--vang);
+}
+
+/* Vietnamese-mark gradient — red→gold animated text */
+.vn-text{
+  background: linear-gradient(120deg, #FF4D5E 0%, #FFB12A 40%, #FFE176 70%, #FF4D5E 100%);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: vnFlow 6s linear infinite;
+  filter: drop-shadow(0 0 18px rgba(230,57,70,.25));
+}
+@keyframes vnFlow{ to { background-position: -200% 0; } }
+
+/* Trống đồng (Đông Sơn drum) motif as background watermark */
+.drum-bg{
+  background-image:
+    radial-gradient(circle, transparent 26%, var(--hair) 26.5%, var(--hair) 27%, transparent 27.5%),
+    radial-gradient(circle, transparent 36%, var(--hair) 36.5%, var(--hair) 37%, transparent 37.5%),
+    radial-gradient(circle, transparent 46%, var(--hair) 46.5%, var(--hair) 47%, transparent 47.5%);
+}
+
+/* Loader */
+#loader{ position:fixed; inset:0; z-index:300; background:var(--ink); display:flex; flex-direction:column; justify-content:flex-end; }
+#loader .panel{ position:absolute; inset:auto 0 0 0; height:50%; background:var(--ink); transform-origin:bottom; }
+#loader .panel.top{ inset:0 0 auto 0; transform-origin:top; }
+#hello{ font-family:'Instrument Serif', serif; font-style: italic; font-size:clamp(60px, 18vw, 220px); line-height:.95; }
+#loadBar{ height:1px; background:var(--hair-2); position:relative; overflow:hidden; }
+#loadBar i{ position:absolute; inset:0; background:var(--ivory); transform-origin:left; transform:scaleX(0); }
+
+/* Magnetic button */
+.mag{
+  position:relative; display:inline-flex; align-items:center; gap:14px;
+  padding:20px 28px; border-radius:999px;
+  background:rgba(244,237,220,0.04);
+  border:1px solid rgba(244,237,220,0.16);
+  overflow:hidden;
+}
+.mag .glow{
+  position:absolute; inset:0; pointer-events:none;
+  background: radial-gradient(80% 120% at var(--mx,50%) var(--my,50%), rgba(244,196,48,.30), transparent 60%);
+  opacity:0; transition: opacity .3s;
+}
+.mag:hover .glow{ opacity:1; }
+.mag .label{ position:relative; z-index:2; }
+
+/* Marquee */
+.marquee{ display:flex; gap:3rem; white-space:nowrap; will-change: transform; }
+
+/* Pcard, Tcard, Ring, Bar (shared with prior) */
+.pcard{ position:relative; flex:0 0 auto; width:min(92vw, 720px); margin-right:5vw; }
+.pcard .frame{
+  position:relative; aspect-ratio: 4/5; overflow:hidden; border-radius:14px;
+  background: linear-gradient(180deg, #1B1626 0%, #0D0B14 100%);
+  border:1px solid var(--hair);
+}
+.imgScale{ transition: transform 1.4s cubic-bezier(.2,.8,.2,1), filter .8s ease; }
+.pcard:hover .imgScale{ transform: scale(1.06); filter: contrast(1.06) saturate(1.05); }
+
+.ring-track{ stroke: var(--hair-2); }
+.ring-fill{ stroke: var(--ivory); stroke-linecap: round; transform: rotate(-90deg); transform-origin: center; }
+
+.bar{ position:relative; height:2px; background: var(--hair); overflow:hidden; border-radius:2px; }
+.bar i{ position:absolute; inset:0; background: linear-gradient(90deg, var(--son), var(--vang)); transform-origin:left; transform: scaleX(0); border-radius:2px; }
+
+.tcard{
+  flex:0 0 auto; width:min(86vw, 560px);
+  padding:40px 36px; border-radius:18px;
+  background: linear-gradient(180deg, rgba(31,26,42,.6), rgba(20,17,27,.4));
+  border:1px solid var(--hair);
+  position:relative;
+}
+.tcard .qm{
+  position:absolute; top:-30px; left:24px;
+  font-family:'Instrument Serif',serif; font-style:italic; font-size:160px; line-height:.6;
+  color:var(--vang); pointer-events:none;
+}
+
+/* Section index rail */
+.rail{ position:fixed; right: 28px; top:50%; transform:translateY(-50%); z-index:60; display:flex; flex-direction:column; gap:14px; }
+.rail a{ display:flex; align-items:center; gap:10px; color:var(--fog); font-family:'Geist Mono', monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; }
+.rail a .d{ width:18px; height:1px; background:var(--fog); transition: width .35s, background .35s; }
+.rail a.active{ color:var(--ivory); }
+.rail a.active .d{ width:36px; background:var(--ivory); }
+@media (max-width: 1024px){ .rail{ display:none; } }
+
+/* Reveal text helpers */
+.clip-text .line{ overflow:hidden; }
+.clip-text .line .inner{ display:inline-block; transform: translateY(110%); will-change: transform; }
+
+/* Big number ticker */
+.tick{ font-feature-settings:"tnum"; }
+
+/* Floating dot accents */
+.dot-vang{ width:8px; height:8px; background:var(--vang); border-radius:999px; display:inline-block; box-shadow: 0 0 14px rgba(244,196,48,.7); }
+.dot-son{ width:8px; height:8px; background:var(--son); border-radius:999px; display:inline-block; box-shadow: 0 0 14px rgba(230,57,70,.7); }
+.dot-ngoc{ width:8px; height:8px; background:var(--ngoc); border-radius:999px; display:inline-block; box-shadow: 0 0 14px rgba(107,212,184,.7); }
+
+/* Disc card icon */
+.disc-icn{
+  width:48px; height:48px; border-radius:14px;
+  background: linear-gradient(135deg, rgba(244,196,48,.15), rgba(230,57,70,.15));
+  border: 1px solid rgba(244,237,220,.16);
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* Lacquer divider */
+.lacquer{
+  height:1px;
+  background:linear-gradient(90deg, transparent, var(--son) 30%, var(--vang) 50%, var(--son) 70%, transparent);
+  opacity:.5;
+}
+
+/* Project hover glow */
+.proj-glow{
+  position:absolute; inset:0; pointer-events:none;
+  background: radial-gradient(40% 60% at var(--gx,50%) var(--gy,50%), rgba(244,196,48,.18), transparent 70%);
+  opacity:0; transition:opacity .4s;
+}
+.proj-card:hover .proj-glow{ opacity:1; }
+
+/* For nav blend */
+header.blend{ mix-blend-mode: difference; }
+
+/* Focus */
+a:focus-visible, button:focus-visible{ outline:1px solid var(--vang); outline-offset:4px; border-radius:2px; }
+
+/* Crystal canvas masking */
+.crystal-stage{ position: relative; }
+
+/* Form */
+.f-row label{ font-family:'Geist Mono', monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color: var(--fog); }
+.f-row input, .f-row textarea{
+  width:100%; background: transparent; border:0; border-bottom: 1px solid var(--hair-2);
+  color: var(--ivory); font-family:'Instrument Serif', serif; font-size: 22px; padding:10px 0;
+  outline:none; resize:none;
+}
+.f-row input:focus, .f-row textarea:focus{ border-color: var(--ivory); }
+
+/* tiny shimmer */
+@keyframes shimmer { 0%,100%{opacity:.5} 50%{opacity:1} }
+.shimmer{ animation: shimmer 2.4s ease-in-out infinite; }
+
+/* Disable cursor on touch */
+@media (hover: none){ .grain::before{ opacity:.04; } }
+</style>
+</head>
+<body class="bg-saigon grain">
+
+<!-- ╭───────────── CURSOR ─────────────╮ -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ╭───────────── 3D CRYSTAL CANVAS (fixed bg) ─────────────╮ -->
+<canvas id="crystal" aria-hidden="true"></canvas>
+
+<!-- ╭───────────── LOADER ─────────────╮ -->
+<div id="loader" aria-hidden="true">
+  <div class="panel top"></div>
+  <div class="panel bottom"></div>
+  <div class="relative z-10 h-full flex flex-col justify-between p-6 md:p-10 pointer-events-none">
+    <div class="flex items-center justify-between text-xs font-mono tracking-[0.18em] uppercase text-haze">
+      <span><span class="vn-star" style="vertical-align:-0.05em"></span>&nbsp;&nbsp;Studio Ticchien</span>
+      <span>SGN · MMXXVI</span>
+    </div>
+    <div>
+      <div id="hello" class="font-serif-i text-ivory">
+        <span data-hello>Xin chào.</span>
+      </div>
+      <div class="mt-10" id="loadBar"><i></i></div>
+      <div class="mt-3 flex justify-between text-[10px] font-mono uppercase tracking-[0.2em] text-fog">
+        <span id="loadLabel">Cutting the crystal</span>
+        <span><span id="loadPct">00</span>%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ╭───────────── NAVIGATION ─────────────╮ -->
+<header class="fixed top-0 left-0 right-0 z-50 blend">
+  <div class="flex items-center justify-between px-5 md:px-10 py-5">
+    <a href="#top" class="group flex items-center gap-3 text-ivory">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" class="transition-transform duration-700 group-hover:rotate-90">
+        <path d="M11 1 L21 7 L21 15 L11 21 L1 15 L1 7 Z" stroke="currentColor" stroke-width=".7" fill="none"/>
+        <path d="M11 5 L17 8 L17 14 L11 17 L5 14 L5 8 Z" stroke="currentColor" stroke-width=".5" fill="none" opacity=".6"/>
+      </svg>
+      <span class="font-display text-[16px] tracking-tight">Dương Chí Hướng</span>
+      <span class="hidden md:inline text-fog font-mono text-[11px] uppercase tracking-[0.22em]">// Ticchien</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-8 text-[12px] font-mono uppercase tracking-[0.2em] text-ivory/80">
+      <a href="#about" class="hover:text-ivory transition">Tôi</a>
+      <a href="#crystal-sec" class="hover:text-ivory transition">Crystal</a>
+      <a href="#disc" class="hover:text-ivory transition">Practice</a>
+      <a href="#work" class="hover:text-ivory transition">Projects</a>
+      <a href="#exp" class="hover:text-ivory transition">Story</a>
+      <a href="#contact" class="hover:text-ivory transition">Liên hệ</a>
+    </nav>
+
+    <a href="#contact" class="hidden md:flex items-center gap-2 text-[12px] font-mono uppercase tracking-[0.18em] text-ivory">
+      <span class="w-2 h-2 rounded-full bg-emerald-400/90 animate-pulse"></span>
+      Open · Q3 / Q4 2026
+    </a>
+    <button class="md:hidden text-ivory text-[12px] font-mono uppercase tracking-[0.2em]" id="menuBtn">Menu</button>
+  </div>
+</header>
+
+<!-- right rail -->
+<aside class="rail" id="rail">
+  <a href="#top"          data-i="01" class="active"><span class="d"></span>Index</a>
+  <a href="#about"        data-i="02"><span class="d"></span>Tôi</a>
+  <a href="#disc"         data-i="03"><span class="d"></span>Practice</a>
+  <a href="#crystal-sec"  data-i="04"><span class="d"></span>Crystal</a>
+  <a href="#skills"       data-i="05"><span class="d"></span>Craft</a>
+  <a href="#work"         data-i="06"><span class="d"></span>Projects</a>
+  <a href="#exp"          data-i="07"><span class="d"></span>Story</a>
+  <a href="#words"        data-i="08"><span class="d"></span>Words</a>
+  <a href="#contact"      data-i="09"><span class="d"></span>Liên hệ</a>
+</aside>
+
+<main id="top">
+
+<!-- ╭───────────── HERO ─────────────╮ -->
+<section id="hero" class="relative min-h-[100svh] px-5 md:px-10 pt-28 md:pt-32 overflow-hidden">
+  <!-- meta strip -->
+  <div class="grid grid-cols-12 gap-6 text-[11px] font-mono uppercase tracking-[0.22em] text-haze hero-meta-row">
+    <div class="col-span-6 md:col-span-3">
+      <div class="text-fog mb-2">Identity</div>
+      <div>Dương Chí Hướng <span class="text-vang">★</span></div>
+    </div>
+    <div class="col-span-6 md:col-span-3">
+      <div class="text-fog mb-2">Handle</div>
+      <div>@ticchien</div>
+    </div>
+    <div class="hidden md:block col-span-3">
+      <div class="text-fog mb-2">Atelier</div>
+      <div>Đà Nẵng · 16.0544° N</div>
+    </div>
+    <div class="hidden md:block col-span-3">
+      <div class="text-fog mb-2">Local time</div>
+      <div id="localTime">— : — : —</div>
+    </div>
+  </div>
+
+  <div class="hairline mt-6"></div>
+
+  <!-- Headline -->
+  <div class="relative pt-12 md:pt-20 grid grid-cols-12 gap-6 items-end">
+    <div class="col-span-12 md:col-span-8">
+      <h1 class="font-display font-display-tight leading-[0.82] select-none">
+        <div class="clip-text">
+          <div class="line"><span class="inner block text-[20vw] md:text-[14vw] lg:text-[12.5vw] font-medium text-ivory">TICCH<span class="font-serif-i text-vang">i</span>EN</span></div>
+        </div>
+        <div class="clip-text mt-2">
+          <div class="line">
+            <span class="inner block text-[10vw] md:text-[6.4vw] text-haze font-light">
+              <span class="font-serif-i text-ivory">a craft of</span>
+              <span class="vn-text font-display">code · motion · ý tưởng</span>
+            </span>
+          </div>
+        </div>
+      </h1>
+
+      <!-- subline cluster -->
+      <div class="hero-sub mt-10 md:mt-14 grid grid-cols-12 gap-5 items-start">
+        <p class="col-span-12 md:col-span-7 text-haze text-[15px] md:text-[16px] leading-[1.65] max-w-[44ch]">
+          Mình là <span class="text-ivory">Dương Chí Hướng</span> — full-stack &amp; creative developer
+          ở <span class="font-serif-i text-vang">Sài Gòn</span>. Mình biến ý tưởng thành những trải nghiệm web mượt,
+          có nhịp, có cảm xúc. Ngoài code, mình làm AI, phân tích dữ liệu &amp; dựng phim — vì mọi pixel đều xứng đáng được kể.
+        </p>
+        <div class="col-span-12 md:col-span-3 text-[11px] font-mono uppercase tracking-[0.22em] text-fog">
+          <div class="text-haze mb-3">Practice</div>
+          <ul class="space-y-2">
+            <li><span class="dot-vang mr-2"></span>Full-stack Engineering</li>
+            <li><span class="dot-son mr-2"></span>AI Engineering</li>
+            <li><span class="dot-ngoc mr-2"></span>Data Analysis</li>
+            <li><span class="inline-block w-2 h-2 bg-ivory rounded-full mr-2"></span>Video Editing</li>
+          </ul>
+        </div>
+        <div class="col-span-12 md:col-span-2 md:text-right">
+          <a href="#work" class="mag" data-magnetic>
+            <span class="label font-mono uppercase text-[11px] tracking-[0.22em]">Projects</span>
+            <span class="label">↓</span>
+            <span class="glow"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- crystal sits on the right via fixed canvas; this is just a spacer column for layout -->
+    <div class="hidden md:block col-span-4 h-[60vh]"></div>
+  </div>
+
+  <!-- bottom edge ticker -->
+  <div class="absolute bottom-5 left-5 md:left-10 right-5 md:right-10 flex items-center justify-between text-[10px] font-mono uppercase tracking-[0.24em] text-fog hero-bottom">
+    <div>Scroll · cuộn xuống</div>
+    <div class="flex items-center gap-3">
+      <span class="dot-vang shimmer"></span>
+      <span>Folio · 2026 · Vol. II</span>
+    </div>
+  </div>
+</section>
+
+<!-- ╭───────────── VN IDENTITY MARQUEE ─────────────╮ -->
+<section class="relative py-7 border-y border-[var(--hair)] overflow-hidden">
+  <div class="marquee font-display text-[8vw] md:text-[5.5vw] leading-none font-medium" id="marquee">
+    <span class="vn-text">Made in Việt Nam</span>
+    <span class="text-fog">·</span>
+    <span class="font-serif-i text-ivory">cut in Sài&nbsp;Gòn</span>
+    <span class="text-vang">★</span>
+    <span class="text-ivory">Cờ đỏ · Sao vàng</span>
+    <span class="text-fog">·</span>
+    <span class="vn-text">Code is art</span>
+    <span class="text-vang">★</span>
+    <span class="font-serif-i text-ivory">in motion</span>
+    <span class="text-fog">·</span>
+    <span class="vn-text">Made in Việt Nam</span>
+    <span class="text-fog">·</span>
+    <span class="font-serif-i text-ivory">cut in Sài&nbsp;Gòn</span>
+    <span class="text-vang">★</span>
+  </div>
+</section>
+
+<!-- ╭───────────── MANIFESTO ─────────────╮ -->
+<section class="relative px-5 md:px-10 pt-28 md:pt-40 pb-24 md:pb-32">
+  <div class="grid grid-cols-12 gap-6 items-start">
+    <div class="col-span-12 md:col-span-3 text-[11px] font-mono uppercase tracking-[0.22em] text-fog">
+      <div class="mb-2 text-haze">01 — Manifesto</div>
+      <div>One quote, lived daily.</div>
+    </div>
+    <div class="col-span-12 md:col-span-9 manifesto-wrap">
+      <p class="font-serif-i text-[10vw] md:text-[6.4vw] leading-[1.05] tracking-tight text-ivory">
+        <span class="text-haze">"Code is not</span>
+        <span class="text-ivory">just logic</span>
+        <span class="text-haze">—</span>
+        <span class="text-vang">it's art</span>
+        <span class="text-ivory">in motion."</span>
+      </p>
+      <div class="mt-10 flex items-center gap-4 text-[11px] font-mono uppercase tracking-[0.22em] text-haze">
+        <span class="dot-vang"></span>
+        <span>— Ticchien, vào một đêm mưa Đà Nẽng</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╭───────────── ABOUT ─────────────╮ -->
+<section id="about" class="relative px-5 md:px-10 py-24 md:py-36">
+  <div class="grid grid-cols-12 gap-6">
+    <!-- LEFT — bio card -->
+    <div class="col-span-12 md:col-span-5">
+      <div class="text-[11px] font-mono uppercase tracking-[0.22em] text-fog mb-3">02 — Lý lịch · Bio</div>
+      <h2 class="font-display font-display-tight text-[14vw] md:text-[6vw] leading-[0.95] text-ivory">
+        Xin <span class="font-serif-i text-vang">chào</span>
+      </h2>
+      <p class="text-haze text-[15px] leading-[1.7] mt-6 max-w-[44ch]">
+        Mình là <span class="text-ivory">Dương Chí Hướng</span>, mọi người trên mạng hay gọi mình là
+        <span class="font-serif-i text-ivory">Ticchien</span>. Sinh ngày
+        <span class="text-ivory">26 · 10 · 2002</span> tại
+        <span class="vn-text font-display">Việt Nam</span>.
+        Mình bắt đầu code từ năm 19 tuổi, làm freelance từ 2022, và đến nay đã đi cùng hơn
+        <span class="text-ivory">50 dự án</span> lớn nhỏ trong &amp; ngoài nước.
+      </p>
+
+      <!-- vital card -->
+      <div class="glass mt-10 p-6 md:p-7">
+        <div class="grid grid-cols-2 gap-5 text-[12px] font-mono uppercase tracking-[0.18em]">
+          <div>
+            <div class="text-fog mb-2">Tên</div>
+            <div class="text-ivory font-display">Dương Chí Hướng</div>
+          </div>
+          <div>
+            <div class="text-fog mb-2">Sinh</div>
+            <div class="text-ivory font-display">26 · 10 · 2002</div>
+          </div>
+          <div>
+            <div class="text-fog mb-2">Quốc tịch</div>
+            <div class="text-ivory font-display">Việt Nam <span class="vn-star ml-1"></span></div>
+          </div>
+          <div>
+            <div class="text-fog mb-2">Atelier</div>
+            <div class="text-ivory font-display">Đéc léc</div>
+          </div>
+          <div>
+            <div class="text-fog mb-2">Bắt đầu</div>
+            <div class="text-ivory font-display">2022</div>
+          </div>
+          <div>
+            <div class="text-fog mb-2">Dự án</div>
+            <div class="text-ivory font-display"><span class="tick" data-count="50">0</span>+ shipped</div>
+          </div>
+          <div>
+            <div class="text-fog mb-2">Cà phê</div>
+            <div class="text-ivory font-display">∞ ly</div>
+          </div>
+          <div>
+            <div class="text-fog mb-2">Sở thích</div>
+            <div class="text-ivory font-display">Pixel · Motion · Phim</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT — manifesto + thumbs -->
+    <div class="col-span-12 md:col-span-7 md:pl-10">
+      <p class="font-display text-[5.4vw] md:text-[3.1vw] leading-[1.15] tracking-tight text-haze about-words">
+        <span class="text-ivory">Tôi biến ý tưởng </span>
+        <span class="text-ivory">thành những trải nghiệm </span>
+        <span class="text-ivory">kỹ thuật số mượt mà </span>
+        <span class="text-ivory">và đầy cảm hứng. </span>
+        <span class="font-serif-i text-vang">Ba năm tu luyện, </span>
+        <span class="font-serif-i text-vang">vô số đêm trắng, </span>
+        <span>và một niềm tin đơn giản — </span>
+        <span class="text-ivory">mỗi chi tiết đều có quyền được chăm chút.</span>
+      </p>
+
+      <!-- 3 numerals -->
+      <div class="grid grid-cols-3 gap-4 md:gap-6 mt-14 md:mt-20">
+        <div class="glass p-5 md:p-7">
+          <div class="font-display text-[10vw] md:text-[5.2vw] leading-none text-vang tick"><span data-count="50">0</span>+</div>
+          <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-3">Projects shipped</div>
+          <div class="text-haze text-[13px] mt-2">Trong &amp; ngoài nước</div>
+        </div>
+        <div class="glass p-5 md:p-7">
+          <div class="font-display text-[10vw] md:text-[5.2vw] leading-none text-son tick"><span data-count="3">0</span></div>
+          <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-3">Năm kinh nghiệm</div>
+          <div class="text-haze text-[13px] mt-2">2022 — Đến nay</div>
+        </div>
+        <div class="glass p-5 md:p-7">
+          <div class="font-display text-[10vw] md:text-[5.2vw] leading-none text-ngoc tick"><span data-count="12">0</span></div>
+          <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-3">Quốc gia phục vụ</div>
+          <div class="text-haze text-[13px] mt-2">Asia · EU · NA</div>
+        </div>
+      </div>
+
+      <div class="lacquer mt-14"></div>
+
+      <p class="mt-10 text-haze text-[15px] leading-[1.8] max-w-[60ch]">
+        <span class="font-serif-i text-ivory">Triết lý làm việc — </span>
+        rõ ràng trong kiến trúc, tinh tế trong chi tiết, mượt mà trong chuyển động.
+        Mình theo đuổi những giải pháp <span class="text-ivory">sáng tạo và hiệu suất cao</span>,
+        không thoả hiệp với những mili-giây thừa, cũng không bỏ rơi một con chữ thiếu dấu.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ╭───────────── DISCIPLINES — 4 glass cards ─────────────╮ -->
+<section id="disc" class="relative px-5 md:px-10 py-24 md:py-32">
+  <div class="flex items-end justify-between flex-wrap gap-6">
+    <div>
+      <div class="text-[11px] font-mono uppercase tracking-[0.22em] text-fog mb-2">03 — Practice</div>
+      <h2 class="font-display font-display-tight text-[12vw] md:text-[7vw] leading-[0.9] text-ivory">
+        Bốn nghề, <span class="font-serif-i text-vang">một bàn tay.</span>
+      </h2>
+    </div>
+    <p class="text-haze text-[14px] leading-[1.7] max-w-[36ch]">
+      Bốn lĩnh vực mình thực hành mỗi ngày — đan vào nhau, hỗ trợ nhau, mỗi nghề mài giũa cho ba nghề còn lại.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-14 md:mt-20">
+
+    <article class="glass p-7 md:p-10 disc-card">
+      <div class="flex items-start justify-between">
+        <div class="disc-icn">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M3 6 L11 2 L19 6 L19 16 L11 20 L3 16 Z" stroke="#F4EDDC" stroke-width=".8"/>
+            <path d="M3 6 L11 10 L19 6 M11 10 V20" stroke="#F4EDDC" stroke-width=".8"/>
+          </svg>
+        </div>
+        <div class="text-[11px] font-mono uppercase tracking-[0.2em] text-fog">i.</div>
+      </div>
+      <h3 class="font-display text-[7vw] md:text-[3.4vw] leading-tight text-ivory mt-8">Full-stack Engineering</h3>
+      <p class="text-haze text-[14px] leading-[1.75] mt-3 max-w-[44ch]">
+        Next.js, React, Node, Postgres, edge-runtime. Mình thiết kế từ schema database cho tới giao diện cuối —
+        đảm bảo mỗi tầng đều có lý do tồn tại.
+      </p>
+      <div class="mt-7 flex flex-wrap gap-2 text-[10px] font-mono uppercase tracking-[0.18em] text-haze">
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">TypeScript</span>
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">Next.js</span>
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">PostgreSQL</span>
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">Cloudflare</span>
+      </div>
+    </article>
+
+    <article class="glass p-7 md:p-10 disc-card">
+      <div class="flex items-start justify-between">
+        <div class="disc-icn">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <circle cx="11" cy="11" r="3" stroke="#F4EDDC" stroke-width=".8"/>
+            <circle cx="11" cy="11" r="8" stroke="#F4EDDC" stroke-width=".5" opacity=".5"/>
+            <path d="M11 1 V4 M11 18 V21 M1 11 H4 M18 11 H21 M4 4 L6 6 M16 16 L18 18 M4 18 L6 16 M16 6 L18 4" stroke="#F4EDDC" stroke-width=".5"/>
+          </svg>
+        </div>
+        <div class="text-[11px] font-mono uppercase tracking-[0.2em] text-fog">ii.</div>
+      </div>
+      <h3 class="font-display text-[7vw] md:text-[3.4vw] leading-tight text-ivory mt-8">AI Engineering</h3>
+      <p class="text-haze text-[14px] leading-[1.75] mt-3 max-w-[44ch]">
+        Xây dựng các pipeline LLM, RAG, agent &amp; tooling. Mình tin AI là người đồng nghiệp — không phải phép màu, cũng không phải mối đe doạ.
+      </p>
+      <div class="mt-7 flex flex-wrap gap-2 text-[10px] font-mono uppercase tracking-[0.18em] text-haze">
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">OpenAI · Claude</span>
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">LangChain</span>
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">Vector DB</span>
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">Python · TS</span>
+      </div>
+    </article>
+
+    <article class="glass p-7 md:p-10 disc-card">
+      <div class="flex items-start justify-between">
+        <div class="disc-icn">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M2 18 L7 12 L11 15 L15 8 L20 14" stroke="#F4EDDC" stroke-width=".8" fill="none"/>
+            <circle cx="7" cy="12" r="1.2" fill="#F4EDDC"/>
+            <circle cx="11" cy="15" r="1.2" fill="#F4EDDC"/>
+            <circle cx="15" cy="8" r="1.2" fill="#F4EDDC"/>
+            <path d="M2 20 H20" stroke="#F4EDDC" stroke-width=".5" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="text-[11px] font-mono uppercase tracking-[0.2em] text-fog">iii.</div>
+      </div>
+      <h3 class="font-display text-[7vw] md:text-[3.4vw] leading-tight text-ivory mt-8">Data Analysis</h3>
+      <p class="text-haze text-[14px] leading-[1.75] mt-3 max-w-[44ch]">
+        Dashboard, ETL, storytelling bằng số liệu. Mỗi biểu đồ phải kể được một câu chuyện trong dưới 5 giây.
+      </p>
+      <div class="mt-7 flex flex-wrap gap-2 text-[10px] font-mono uppercase tracking-[0.18em] text-haze">
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">SQL · dbt</span>
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">Python · Pandas</span>
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">Metabase</span>
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">D3.js</span>
+      </div>
+    </article>
+
+    <article class="glass p-7 md:p-10 disc-card">
+      <div class="flex items-start justify-between">
+        <div class="disc-icn">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <rect x="2" y="5" width="18" height="12" rx="1.5" stroke="#F4EDDC" stroke-width=".8"/>
+            <path d="M9 8 L14 11 L9 14 Z" fill="#F4EDDC"/>
+            <path d="M2 9 H4 M2 13 H4 M18 9 H20 M18 13 H20" stroke="#F4EDDC" stroke-width=".5"/>
+          </svg>
+        </div>
+        <div class="text-[11px] font-mono uppercase tracking-[0.2em] text-fog">iv.</div>
+      </div>
+      <h3 class="font-display text-[7vw] md:text-[3.4vw] leading-tight text-ivory mt-8">Video Editing</h3>
+      <p class="text-haze text-[14px] leading-[1.75] mt-3 max-w-[44ch]">
+        Dựng reel, motion graphic, &amp; cinematic edit. Cảm thấy nhịp phim cũng giống nhịp code —
+        đều cần beat &amp; breathing room.
+      </p>
+      <div class="mt-7 flex flex-wrap gap-2 text-[10px] font-mono uppercase tracking-[0.18em] text-haze">
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">DaVinci</span>
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">After Effects</span>
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">Premiere</span>
+        <span class="px-2.5 py-1 border border-[var(--hair-2)] rounded-full">Cinema 4D</span>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ╭───────────── CRYSTAL PINNED SECTION ─────────────╮ -->
+<section id="crystal-sec" class="relative min-h-[180vh] px-5 md:px-10">
+  <div id="crystalPin" class="relative h-[100vh] flex items-center justify-center">
+    <div class="grid grid-cols-12 gap-6 items-center w-full">
+      <div class="col-span-12 md:col-span-4 c-left">
+        <div class="text-[11px] font-mono uppercase tracking-[0.22em] text-fog mb-3">04 — Crystal</div>
+        <h2 class="font-display font-display-tight text-[14vw] md:text-[5.6vw] leading-[0.95] text-ivory">
+          Một khối<br/>
+          <span class="font-serif-i text-vang">mười hai mặt.</span>
+        </h2>
+        <p class="text-haze text-[14px] leading-[1.75] mt-6 max-w-[36ch]">
+          Hình tượng cho cách mình làm việc — nhìn từ bất kỳ góc nào, vẫn có một mặt mới
+          phản chiếu ánh sáng. Cuộn xuống để xoay khối thuỷ tinh.
+        </p>
+      </div>
+      <div class="col-span-12 md:col-span-4 c-mid"></div>
+      <div class="col-span-12 md:col-span-4 c-right text-right">
+        <ul class="space-y-3 text-[12px] font-mono uppercase tracking-[0.22em]" id="crystalFacets">
+          <li class="facet" data-i="01"><span class="text-fog">01 ·</span> <span class="text-ivory">Engineering</span></li>
+          <li class="facet" data-i="02"><span class="text-fog">02 ·</span> <span class="text-ivory">Motion</span></li>
+          <li class="facet" data-i="03"><span class="text-fog">03 ·</span> <span class="text-ivory">Intelligence</span></li>
+          <li class="facet" data-i="04"><span class="text-fog">04 ·</span> <span class="text-ivory">Data</span></li>
+          <li class="facet" data-i="05"><span class="text-fog">05 ·</span> <span class="text-ivory">Image</span></li>
+          <li class="facet" data-i="06"><span class="text-fog">06 ·</span> <span class="text-ivory">Sound</span></li>
+          <li class="facet" data-i="07"><span class="text-fog">07 ·</span> <span class="text-ivory">Type</span></li>
+          <li class="facet" data-i="08"><span class="text-fog">08 ·</span> <span class="text-ivory">Tempo</span></li>
+          <li class="facet" data-i="09"><span class="text-fog">09 ·</span> <span class="text-ivory">Material</span></li>
+          <li class="facet" data-i="10"><span class="text-fog">10 ·</span> <span class="text-ivory">Light</span></li>
+          <li class="facet" data-i="11"><span class="text-fog">11 ·</span> <span class="text-ivory">Patience</span></li>
+          <li class="facet" data-i="12"><span class="text-fog">12 ·</span> <span class="text-ivory">Soul</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="absolute bottom-8 left-0 right-0 text-center text-[11px] font-mono uppercase tracking-[0.24em] text-fog">
+      <span class="dot-vang mr-2 shimmer"></span>Hold scroll — let it spin
+    </div>
+  </div>
+</section>
+
+<!-- ╭───────────── SKILLS ─────────────╮ -->
+<section id="skills" class="relative px-5 md:px-10 py-24 md:py-32 border-t border-[var(--hair)]">
+  <div class="flex items-end justify-between flex-wrap gap-6">
+    <div>
+      <div class="text-[11px] font-mono uppercase tracking-[0.22em] text-fog mb-2">05 — Craft</div>
+      <h2 class="font-display font-display-tight text-[10vw] md:text-[6.8vw] leading-[0.9] text-ivory">
+        Công cụ <span class="font-serif-i text-vang">hằng ngày</span>
+      </h2>
+    </div>
+    <p class="text-haze text-[14px] leading-[1.7] max-w-[36ch]">
+      Những vật liệu mình cầm lên mỗi sáng. Không liệt kê cho đầy — chỉ những thứ thật sự đã chảy qua mười đầu ngón tay.
+    </p>
+  </div>
+
+  <!-- Circular -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 mt-16">
+    <!-- 8 cards -->
+    <div class="glass p-6 md:p-7" data-skill data-pct="96">
+      <svg viewBox="0 0 120 120" class="w-24 h-24 md:w-28 md:h-28 mx-auto">
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="1" class="ring-track"/>
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="2" class="ring-fill" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+      </svg>
+      <div class="text-center mt-5">
+        <div class="font-display text-ivory text-[22px] leading-none">TypeScript</div>
+        <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-2"><span data-count="96">0</span>%</div>
+      </div>
+    </div>
+
+    <div class="glass p-6 md:p-7" data-skill data-pct="94">
+      <svg viewBox="0 0 120 120" class="w-24 h-24 md:w-28 md:h-28 mx-auto">
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="1" class="ring-track"/>
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="2" class="ring-fill" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+      </svg>
+      <div class="text-center mt-5">
+        <div class="font-display text-ivory text-[22px] leading-none">React · Next</div>
+        <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-2"><span data-count="94">0</span>%</div>
+      </div>
+    </div>
+
+    <div class="glass p-6 md:p-7" data-skill data-pct="92">
+      <svg viewBox="0 0 120 120" class="w-24 h-24 md:w-28 md:h-28 mx-auto">
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="1" class="ring-track"/>
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="2" class="ring-fill" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+      </svg>
+      <div class="text-center mt-5">
+        <div class="font-display text-ivory text-[22px] leading-none">GSAP · Motion</div>
+        <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-2"><span data-count="92">0</span>%</div>
+      </div>
+    </div>
+
+    <div class="glass p-6 md:p-7" data-skill data-pct="88">
+      <svg viewBox="0 0 120 120" class="w-24 h-24 md:w-28 md:h-28 mx-auto">
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="1" class="ring-track"/>
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="2" class="ring-fill" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+      </svg>
+      <div class="text-center mt-5">
+        <div class="font-display text-ivory text-[22px] leading-none">Three.js</div>
+        <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-2"><span data-count="88">0</span>%</div>
+      </div>
+    </div>
+
+    <div class="glass p-6 md:p-7" data-skill data-pct="90">
+      <svg viewBox="0 0 120 120" class="w-24 h-24 md:w-28 md:h-28 mx-auto">
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="1" class="ring-track"/>
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="2" class="ring-fill" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+      </svg>
+      <div class="text-center mt-5">
+        <div class="font-display text-ivory text-[22px] leading-none">Python · AI</div>
+        <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-2"><span data-count="90">0</span>%</div>
+      </div>
+    </div>
+
+    <div class="glass p-6 md:p-7" data-skill data-pct="86">
+      <svg viewBox="0 0 120 120" class="w-24 h-24 md:w-28 md:h-28 mx-auto">
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="1" class="ring-track"/>
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="2" class="ring-fill" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+      </svg>
+      <div class="text-center mt-5">
+        <div class="font-display text-ivory text-[22px] leading-none">Node · Postgres</div>
+        <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-2"><span data-count="86">0</span>%</div>
+      </div>
+    </div>
+
+    <div class="glass p-6 md:p-7" data-skill data-pct="84">
+      <svg viewBox="0 0 120 120" class="w-24 h-24 md:w-28 md:h-28 mx-auto">
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="1" class="ring-track"/>
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="2" class="ring-fill" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+      </svg>
+      <div class="text-center mt-5">
+        <div class="font-display text-ivory text-[22px] leading-none">Data · SQL</div>
+        <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-2"><span data-count="84">0</span>%</div>
+      </div>
+    </div>
+
+    <div class="glass p-6 md:p-7" data-skill data-pct="89">
+      <svg viewBox="0 0 120 120" class="w-24 h-24 md:w-28 md:h-28 mx-auto">
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="1" class="ring-track"/>
+        <circle cx="60" cy="60" r="52" fill="none" stroke-width="2" class="ring-fill" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+      </svg>
+      <div class="text-center mt-5">
+        <div class="font-display text-ivory text-[22px] leading-none">Video · FX</div>
+        <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-2"><span data-count="89">0</span>%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bars -->
+  <div class="mt-24 grid grid-cols-12 gap-6">
+    <div class="col-span-12 md:col-span-4">
+      <div class="text-[11px] font-mono uppercase tracking-[0.22em] text-fog">Toolbox</div>
+      <div class="font-display text-ivory text-[28px] mt-2">Bút máy hằng ngày</div>
+      <div class="text-haze text-[13px] mt-2 max-w-[30ch]">Phần mềm &amp; nền tảng mình mở từ sáng tới tối.</div>
+    </div>
+    <div class="col-span-12 md:col-span-8 space-y-6">
+      <div>
+        <div class="flex justify-between text-[12px] font-mono uppercase tracking-[0.18em]">
+          <span class="text-ivory">Figma</span><span class="text-fog">95</span>
+        </div>
+        <div class="bar mt-3"><i data-bar="0.95"></i></div>
+      </div>
+      <div>
+        <div class="flex justify-between text-[12px] font-mono uppercase tracking-[0.18em]">
+          <span class="text-ivory">Tailwind · CSS</span><span class="text-fog">98</span>
+        </div>
+        <div class="bar mt-3"><i data-bar="0.98"></i></div>
+      </div>
+      <div>
+        <div class="flex justify-between text-[12px] font-mono uppercase tracking-[0.18em]">
+          <span class="text-ivory">DaVinci Resolve</span><span class="text-fog">90</span>
+        </div>
+        <div class="bar mt-3"><i data-bar="0.90"></i></div>
+      </div>
+      <div>
+        <div class="flex justify-between text-[12px] font-mono uppercase tracking-[0.18em]">
+          <span class="text-ivory">Cloudflare · Vercel</span><span class="text-fog">92</span>
+        </div>
+        <div class="bar mt-3"><i data-bar="0.92"></i></div>
+      </div>
+      <div>
+        <div class="flex justify-between text-[12px] font-mono uppercase tracking-[0.18em]">
+          <span class="text-ivory">Sanity · Payload CMS</span><span class="text-fog">88</span>
+        </div>
+        <div class="bar mt-3"><i data-bar="0.88"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╭───────────── SELECTED PROJECTS ─────────────╮ -->
+<section id="work" class="relative px-5 md:px-10 py-24 md:py-36 border-t border-[var(--hair)]">
+
+  <div class="flex items-end justify-between flex-wrap gap-6">
+    <div>
+      <div class="text-[11px] font-mono uppercase tracking-[0.22em] text-fog mb-2">06 — Projects</div>
+      <h2 class="font-display font-display-tight text-[10vw] md:text-[7vw] leading-[0.9] text-ivory">
+        Việc đã <span class="font-serif-i text-vang">làm xong</span>
+      </h2>
+    </div>
+    <p class="text-haze text-[14px] leading-[1.7] max-w-[34ch]">
+      Một lát cắt từ <span class="text-ivory">50+ dự án</span> mình đã giao trong 3 năm qua —
+      web, app, AI tool, motion piece.
+    </p>
+  </div>
+
+  <!-- FEATURED — NRGLOBAL -->
+  <a href="#" class="block mt-16 group">
+    <div class="relative overflow-hidden rounded-[24px] border border-[var(--hair-2)] glass">
+      <div class="relative aspect-[16/9] md:aspect-[21/9] overflow-hidden">
+        <svg class="absolute inset-0 w-full h-full" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="nrG" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#1B1322"/>
+              <stop offset="50%" stop-color="#22162E"/>
+              <stop offset="100%" stop-color="#0C0815"/>
+            </linearGradient>
+            <radialGradient id="nrR" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#E63946" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#E63946" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="1200" height="600" fill="url(#nrG)"/>
+          <rect width="1200" height="600" fill="url(#nrR)"/>
+          <!-- Concentric Đông Sơn-style circles -->
+          <g fill="none" stroke="#F4C430" stroke-width=".5" opacity=".6" transform="translate(900,300)">
+            <circle r="40"/><circle r="80"/><circle r="120"/><circle r="160"/><circle r="200"/>
+            <g stroke-width=".25">
+              <line x1="-220" y1="0" x2="220" y2="0"/>
+              <line x1="0" y1="-220" x2="0" y2="220"/>
+              <line x1="-156" y1="-156" x2="156" y2="156"/>
+              <line x1="-156" y1="156" x2="156" y2="-156"/>
+            </g>
+          </g>
+          <text x="80" y="170" font-family="Bricolage Grotesque" font-weight="700" font-size="160" fill="#F4EDDC" letter-spacing="-7">NRGLOBAL</text>
+          <text x="84" y="220" font-family="Instrument Serif" font-style="italic" font-size="56" fill="#F4C430">a corporate front, reimagined</text>
+          <text x="80" y="540" font-family="Geist Mono" font-size="14" letter-spacing="3" fill="#A89DB6">FLAGSHIP · 2024 · ENTERPRISE WEB</text>
+        </svg>
+        <div class="proj-glow"></div>
+      </div>
+    </div>
+    <div class="flex items-end justify-between flex-wrap gap-4 mt-6">
+      <div>
+        <div class="text-[11px] font-mono uppercase tracking-[0.22em] text-vang">★ Featured · 2024</div>
+        <h3 class="font-display text-ivory text-[6vw] md:text-[3vw] leading-tight mt-1">NRGLOBAL — Corporate web platform</h3>
+        <p class="text-haze text-[14px] mt-2 max-w-[60ch]">
+          Trang chủ &amp; hệ thống nội dung cho tập đoàn năng lượng quốc tế.
+          Next.js, Sanity, GSAP, edge SSR, đa ngôn ngữ Anh/Việt/Pháp.
+          Lighthouse 98 trên mọi route.
+        </p>
+      </div>
+      <div class="flex items-center gap-4 text-[11px] font-mono uppercase tracking-[0.2em] text-fog">
+        <span>Next.js</span><span>·</span><span>Sanity</span><span>·</span><span>GSAP</span><span>·</span>
+        <span class="text-ivory underline-offset-4 group-hover:underline">View ↗</span>
+      </div>
+    </div>
+  </a>
+
+  <!-- GRID 4 -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-16">
+
+    <a href="#" class="proj-card relative block group">
+      <div class="relative aspect-[5/4] overflow-hidden rounded-[18px] border border-[var(--hair)] glass">
+        <svg class="absolute inset-0 w-full h-full" viewBox="0 0 800 640" preserveAspectRatio="xMidYMid slice">
+          <rect width="800" height="640" fill="#13101B"/>
+          <g stroke="#6BD4B8" stroke-width=".6" fill="none" opacity=".8">
+            <path d="M50 500 C 200 380, 380 600, 750 420"/>
+            <path d="M50 460 C 200 340, 380 560, 750 380"/>
+            <path d="M50 420 C 200 300, 380 520, 750 340"/>
+          </g>
+          <g fill="#F4EDDC">
+            <circle cx="120" cy="465" r="3"/><circle cx="280" cy="430" r="3"/><circle cx="420" cy="510" r="3"/><circle cx="580" cy="412" r="3"/><circle cx="700" cy="400" r="3"/>
+          </g>
+          <text x="40" y="120" font-family="Bricolage Grotesque" font-weight="700" font-size="72" fill="#F4EDDC">Pulse</text>
+          <text x="40" y="160" font-family="Instrument Serif" font-style="italic" font-size="28" fill="#6BD4B8">analytics for indie SaaS</text>
+        </svg>
+        <div class="proj-glow"></div>
+      </div>
+      <div class="flex items-end justify-between mt-4">
+        <div>
+          <div class="text-[11px] font-mono uppercase tracking-[0.2em] text-fog">SaaS Dashboard · 2025</div>
+          <h4 class="font-display text-ivory text-[22px] mt-1">Pulse — Real-time analytics</h4>
+        </div>
+        <div class="text-haze text-[12px] font-mono">React · D3 · ClickHouse</div>
+      </div>
+    </a>
+
+    <a href="#" class="proj-card relative block group">
+      <div class="relative aspect-[5/4] overflow-hidden rounded-[18px] border border-[var(--hair)] glass">
+        <svg class="absolute inset-0 w-full h-full" viewBox="0 0 800 640" preserveAspectRatio="xMidYMid slice">
+          <rect width="800" height="640" fill="#110B14"/>
+          <g fill="#E63946" opacity=".85">
+            <circle cx="220" cy="300" r="110"/>
+          </g>
+          <g fill="#F4C430" opacity=".7">
+            <circle cx="430" cy="380" r="80"/>
+          </g>
+          <g fill="#6BD4B8" opacity=".6">
+            <circle cx="600" cy="270" r="60"/>
+          </g>
+          <g stroke="#F4EDDC" stroke-width=".5" opacity=".35" fill="none">
+            <line x1="40" y1="490" x2="760" y2="490"/>
+            <line x1="40" y1="530" x2="760" y2="530"/>
+            <line x1="40" y1="570" x2="760" y2="570"/>
+          </g>
+          <text x="40" y="120" font-family="Bricolage Grotesque" font-weight="700" font-size="72" fill="#F4EDDC">Cờ Đỏ</text>
+          <text x="40" y="160" font-family="Instrument Serif" font-style="italic" font-size="28" fill="#F4C430">a daily reader for VN news</text>
+        </svg>
+        <div class="proj-glow"></div>
+      </div>
+      <div class="flex items-end justify-between mt-4">
+        <div>
+          <div class="text-[11px] font-mono uppercase tracking-[0.2em] text-fog">Editorial · 2024</div>
+          <h4 class="font-display text-ivory text-[22px] mt-1">Cờ Đỏ — Báo điện tử thử nghiệm</h4>
+        </div>
+        <div class="text-haze text-[12px] font-mono">Astro · MDX · CF</div>
+      </div>
+    </a>
+
+    <a href="#" class="proj-card relative block group">
+      <div class="relative aspect-[5/4] overflow-hidden rounded-[18px] border border-[var(--hair)] glass">
+        <svg class="absolute inset-0 w-full h-full" viewBox="0 0 800 640" preserveAspectRatio="xMidYMid slice">
+          <rect width="800" height="640" fill="#0F0C16"/>
+          <g fill="none" stroke="#F4EDDC" stroke-width=".5" opacity=".5">
+            <path d="M120 500 Q 400 200 680 500"/>
+            <path d="M120 530 Q 400 230 680 530"/>
+            <path d="M120 560 Q 400 260 680 560"/>
+          </g>
+          <g fill="#F4EDDC">
+            <circle cx="400" cy="350" r="3"/><circle cx="300" cy="300" r="2"/><circle cx="500" cy="320" r="2"/>
+            <circle cx="350" cy="260" r="2"/><circle cx="450" cy="240" r="1.5"/>
+          </g>
+          <text x="40" y="120" font-family="Bricolage Grotesque" font-weight="700" font-size="72" fill="#F4EDDC">Atlas</text>
+          <text x="40" y="160" font-family="Instrument Serif" font-style="italic" font-size="28" fill="#6BD4B8">an AI agent for ops teams</text>
+        </svg>
+        <div class="proj-glow"></div>
+      </div>
+      <div class="flex items-end justify-between mt-4">
+        <div>
+          <div class="text-[11px] font-mono uppercase tracking-[0.2em] text-fog">AI Tool · 2025</div>
+          <h4 class="font-display text-ivory text-[22px] mt-1">Atlas — Operations co-pilot</h4>
+        </div>
+        <div class="text-haze text-[12px] font-mono">Claude · LangGraph · TS</div>
+      </div>
+    </a>
+
+    <a href="#" class="proj-card relative block group">
+      <div class="relative aspect-[5/4] overflow-hidden rounded-[18px] border border-[var(--hair)] glass">
+        <svg class="absolute inset-0 w-full h-full" viewBox="0 0 800 640" preserveAspectRatio="xMidYMid slice">
+          <rect width="800" height="640" fill="#100B16"/>
+          <g fill="#F4C430" opacity=".18">
+            <rect x="60" y="60" width="160" height="200"/>
+            <rect x="240" y="120" width="160" height="200"/>
+            <rect x="420" y="200" width="160" height="200"/>
+            <rect x="600" y="80" width="160" height="200"/>
+          </g>
+          <g stroke="#F4EDDC" stroke-width=".5" opacity=".3" fill="none">
+            <line x1="40" y1="450" x2="760" y2="450"/>
+            <line x1="40" y1="490" x2="760" y2="490"/>
+            <line x1="40" y1="530" x2="760" y2="530"/>
+          </g>
+          <text x="40" y="600" font-family="Bricolage Grotesque" font-weight="700" font-size="60" fill="#F4EDDC">Reel · MMXXIV</text>
+        </svg>
+        <div class="proj-glow"></div>
+      </div>
+      <div class="flex items-end justify-between mt-4">
+        <div>
+          <div class="text-[11px] font-mono uppercase tracking-[0.2em] text-fog">Motion Reel · 2024</div>
+          <h4 class="font-display text-ivory text-[22px] mt-1">A Year in Frames — Showreel</h4>
+        </div>
+        <div class="text-haze text-[12px] font-mono">DaVinci · AE · C4D</div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="flex justify-center mt-16">
+    <a href="#" class="mag" data-magnetic>
+      <span class="label font-mono uppercase text-[11px] tracking-[0.22em]">All 50+ projects</span>
+      <span class="label">↗</span>
+      <span class="glow"></span>
+    </a>
+  </div>
+</section>
+
+<!-- ╭───────────── EXPERIENCE ─────────────╮ -->
+<section id="exp" class="relative px-5 md:px-10 py-24 md:py-36">
+  <div class="grid grid-cols-12 gap-6">
+    <div class="col-span-12 md:col-span-4">
+      <div class="text-[11px] font-mono uppercase tracking-[0.22em] text-fog mb-2">07 — Story</div>
+      <h2 class="font-display font-display-tight text-[12vw] md:text-[5.4vw] leading-[0.95] text-ivory">
+        Một đường <br/><span class="font-serif-i text-vang">cong nhỏ.</span>
+      </h2>
+      <p class="text-haze text-[14px] leading-[1.7] mt-8 max-w-[30ch]">
+        Từ một cậu sinh viên năm hai sửa template WordPress — đến studio một-người ở ĐN.
+      </p>
+    </div>
+
+    <div class="col-span-12 md:col-span-8 md:pl-10 relative">
+      <div class="absolute left-0 md:left-2 top-0 bottom-0 w-px bg-[var(--hair)]"></div>
+      <div id="expProgress" class="absolute left-0 md:left-2 top-0 w-px" style="height:0; background:linear-gradient(180deg, var(--son), var(--vang));"></div>
+
+      <ol class="space-y-12 md:space-y-16 pl-8 md:pl-12 relative">
+
+        <li class="exp-item relative">
+          <span class="absolute -left-[31px] md:-left-[38px] top-1 w-3 h-3 rounded-full border border-ivory bg-ink exp-dot"></span>
+          <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <div class="font-mono text-[11px] uppercase tracking-[0.22em] text-vang">2025 — Đến nay</div>
+            <div class="font-display text-ivory text-[26px]">Founder · Studio Ticchien</div>
+          </div>
+          <p class="text-haze text-[14px] leading-[1.75] mt-3 max-w-[60ch]">
+            Mở studio cá nhân. Brand site, sản phẩm SaaS, motion piece &amp; consult AI.
+            Booking đang mở Q3/Q4 2026.
+          </p>
+        </li>
+
+        <li class="exp-item relative">
+          <span class="absolute -left-[31px] md:-left-[38px] top-1 w-3 h-3 rounded-full border border-ivory bg-ink exp-dot"></span>
+          <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <div class="font-mono text-[11px] uppercase tracking-[0.22em] text-vang">2024 — Featured</div>
+            <div class="font-display text-ivory text-[26px]">NRGLOBAL · Flagship launch</div>
+          </div>
+          <p class="text-haze text-[14px] leading-[1.75] mt-3 max-w-[60ch]">
+            Dẫn dắt front-end &amp; motion cho corporate platform của tập đoàn năng lượng quốc tế.
+            7 tháng từ brief tới launch, ba ngôn ngữ, 24 trang con.
+          </p>
+        </li>
+
+        <li class="exp-item relative">
+          <span class="absolute -left-[31px] md:-left-[38px] top-1 w-3 h-3 rounded-full border border-ivory bg-ink exp-dot"></span>
+          <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <div class="font-mono text-[11px] uppercase tracking-[0.22em] text-vang">2023</div>
+            <div class="font-display text-ivory text-[26px]">Specialised in scroll-motion</div>
+          </div>
+          <p class="text-haze text-[14px] leading-[1.75] mt-3 max-w-[60ch]">
+            Toàn lực vào GSAP &amp; ScrollTrigger. Hai dự án vào Honourable Mention của Awwwards,
+            một dự án được CSS Design Awards gọi tên.
+          </p>
+        </li>
+
+        <li class="exp-item relative">
+          <span class="absolute -left-[31px] md:-left-[38px] top-1 w-3 h-3 rounded-full border border-ivory bg-ink exp-dot"></span>
+          <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <div class="font-mono text-[11px] uppercase tracking-[0.22em] text-vang">2022</div>
+            <div class="font-display text-ivory text-[26px]">Freelance Full-Stack Tự do</div>
+          </div>
+          <p class="text-haze text-[14px] leading-[1.75] mt-3 max-w-[60ch]">
+            Khởi đầu chính thức. Phát triển hơn 50+ dự án web &amp; web app cho khách trong &amp; ngoài nước.
+            Tập trung vào hiệu suất, animation mượt &amp; tối ưu UX cho các sản phẩm SaaS.
+          </p>
+        </li>
+
+        <li class="exp-item relative">
+          <span class="absolute -left-[31px] md:-left-[38px] top-1 w-3 h-3 rounded-full border border-ivory bg-ink exp-dot"></span>
+          <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <div class="font-mono text-[11px] uppercase tracking-[0.22em] text-vang">2021</div>
+            <div class="font-display text-ivory text-[26px]">Lần đầu chạm vào dòng code</div>
+          </div>
+          <p class="text-haze text-[14px] leading-[1.75] mt-3 max-w-[60ch]">
+            Mod template WordPress cho quán cà phê chú họ. Lần đầu nhìn thấy
+            <span class="font-serif-i text-ivory">"localhost:3000" sáng lên</span> — biết mình sẽ ở đây lâu.
+          </p>
+        </li>
+
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ╭───────────── BIG NUMBERS / STATS ─────────────╮ -->
+<section class="relative px-5 md:px-10 py-24 md:py-32 border-t border-[var(--hair)]">
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div>
+      <div class="font-display text-[16vw] md:text-[7vw] leading-none tick text-ivory"><span data-count="50">0</span>+</div>
+      <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-3">Dự án</div>
+      <div class="text-haze text-[13px] mt-1">In &amp; out of Vietnam</div>
+    </div>
+    <div>
+      <div class="font-display text-[16vw] md:text-[7vw] leading-none tick text-vang"><span data-count="3">0</span></div>
+      <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-3">Năm</div>
+      <div class="text-haze text-[13px] mt-1">2022 — Đến nay</div>
+    </div>
+    <div>
+      <div class="font-display text-[16vw] md:text-[7vw] leading-none tick text-son"><span data-count="12">0</span></div>
+      <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-3">Quốc gia</div>
+      <div class="text-haze text-[13px] mt-1">Asia · EU · NA · OC</div>
+    </div>
+    <div>
+      <div class="font-display text-[16vw] md:text-[7vw] leading-none tick text-ngoc"><span data-count="98">0</span></div>
+      <div class="text-fog text-[11px] font-mono uppercase tracking-[0.2em] mt-3">Lighthouse avg.</div>
+      <div class="text-haze text-[13px] mt-1">Performance bằng đam mê</div>
+    </div>
+  </div>
+</section>
+
+<!-- ╭───────────── TESTIMONIALS · horizontal ─────────────╮ -->
+<section id="words" class="relative pt-24 md:pt-32 pb-24 md:pb-32 border-t border-[var(--hair)]">
+  <div class="px-5 md:px-10">
+    <div class="flex items-end justify-between flex-wrap gap-6">
+      <div>
+        <div class="text-[11px] font-mono uppercase tracking-[0.22em] text-fog mb-2">08 — Words</div>
+        <h2 class="font-display font-display-tight text-[10vw] md:text-[7vw] leading-[0.9] text-ivory">
+          Lời <span class="font-serif-i text-vang">khen</span>
+        </h2>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="tPrev" class="w-12 h-12 rounded-full border border-[var(--hair-2)] flex items-center justify-center text-ivory hover:border-ivory transition" aria-label="Previous">←</button>
+        <button id="tNext" class="w-12 h-12 rounded-full border border-[var(--hair-2)] flex items-center justify-center text-ivory hover:border-ivory transition" aria-label="Next">→</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tTrack" class="mt-14 overflow-hidden">
+    <div id="tInner" class="flex gap-6 px-5 md:px-10 will-change-transform">
+      <article class="tcard">
+        <span class="qm">"</span>
+        <p class="font-serif-i text-ivory text-[24px] leading-[1.4]">
+          Hướng làm web như một người đánh đàn — mỗi nhịp đều có lý do.
+          Trang chủ NRGLOBAL chạy mượt đến nỗi chính chúng tôi cũng phải scroll thử mỗi sáng.
+        </p>
+        <div class="hairline mt-8"></div>
+        <div class="mt-5 flex items-baseline justify-between">
+          <div>
+            <div class="text-ivory font-display text-[18px]">Trịnh Quang Khải</div>
+            <div class="text-haze text-[12px] mt-0.5">Head of Brand · NRGLOBAL</div>
+          </div>
+          <div class="text-fog text-[10px] font-mono uppercase tracking-[0.2em]">N° 01</div>
+        </div>
+      </article>
+
+      <article class="tcard">
+        <span class="qm">"</span>
+        <p class="font-serif-i text-ivory text-[24px] leading-[1.4]">
+          The kind of developer you keep on speed-dial. Quietly excellent — code đẹp,
+          giao đúng hạn, và sẵn sàng giải thích cả những thứ tôi không hỏi.
+        </p>
+        <div class="hairline mt-8"></div>
+        <div class="mt-5 flex items-baseline justify-between">
+          <div>
+            <div class="text-ivory font-display text-[18px]">Camille Aubert</div>
+            <div class="text-haze text-[12px] mt-0.5">Founder · Atelier Soleil (FR)</div>
+          </div>
+          <div class="text-fog text-[10px] font-mono uppercase tracking-[0.2em]">N° 02</div>
+        </div>
+      </article>
+
+      <article class="tcard">
+        <span class="qm">"</span>
+        <p class="font-serif-i text-ivory text-[24px] leading-[1.4]">
+          Làm việc với Ticchien là một trải nghiệm hiếm có ở Việt Nam:
+          chuyên môn cao, gu thẩm mỹ rõ ràng, và ý kiến phản biện
+          khiến brief của chúng tôi tốt hơn 30%.
+        </p>
+        <div class="hairline mt-8"></div>
+        <div class="mt-5 flex items-baseline justify-between">
+          <div>
+            <div class="text-ivory font-display text-[18px]">Đặng Hà Linh</div>
+            <div class="text-haze text-[12px] mt-0.5">CMO · Pulse Analytics</div>
+          </div>
+          <div class="text-fog text-[10px] font-mono uppercase tracking-[0.2em]">N° 03</div>
+        </div>
+      </article>
+
+      <article class="tcard">
+        <span class="qm">"</span>
+        <p class="font-serif-i text-ivory text-[24px] leading-[1.4]">
+          He pushed back on three bad ideas, quietly fixed four others, and shipped two days early.
+          We've never had a launch go this smoothly.
+        </p>
+        <div class="hairline mt-8"></div>
+        <div class="mt-5 flex items-baseline justify-between">
+          <div>
+            <div class="text-ivory font-display text-[18px]">Daniel Park</div>
+            <div class="text-haze text-[12px] mt-0.5">CTO · Aerial Systems (SG)</div>
+          </div>
+          <div class="text-fog text-[10px] font-mono uppercase tracking-[0.2em]">N° 04</div>
+        </div>
+      </article>
+
+      <article class="tcard">
+        <span class="qm">"</span>
+        <p class="font-serif-i text-ivory text-[24px] leading-[1.4]">
+          Một cộng tác viên hiếm có — vừa code được, vừa edit phim được,
+          lại còn biết SEO. Mình hy vọng anh đừng nổi tiếng quá nhanh.
+        </p>
+        <div class="hairline mt-8"></div>
+        <div class="mt-5 flex items-baseline justify-between">
+          <div>
+            <div class="text-ivory font-display text-[18px]">Lê Minh Tuấn</div>
+            <div class="text-haze text-[12px] mt-0.5">Founder · Cờ Đỏ Daily</div>
+          </div>
+          <div class="text-fog text-[10px] font-mono uppercase tracking-[0.2em]">N° 05</div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ╭───────────── CONTACT ─────────────╮ -->
+<section id="contact" class="relative px-5 md:px-10 pt-28 md:pt-36 pb-16 border-t border-[var(--hair)]">
+
+  <div class="text-[11px] font-mono uppercase tracking-[0.22em] text-fog">09 — Liên hệ</div>
+
+  <div class="contact-h mt-6">
+    <h2 class="font-display font-display-tight leading-[0.85]">
+      <div class="clip-text"><div class="line"><span class="inner block text-[18vw] md:text-[13vw] text-ivory">Cùng làm</span></div></div>
+      <div class="clip-text"><div class="line"><span class="inner block text-[18vw] md:text-[13vw] font-serif-i text-vang">điều gì đó</span></div></div>
+      <div class="clip-text"><div class="line"><span class="inner block text-[18vw] md:text-[13vw] text-ivory">tử tế.</span></div></div>
+    </h2>
+  </div>
+
+  <div class="grid grid-cols-12 gap-6 mt-14 md:mt-20">
+    <div class="col-span-12 md:col-span-7">
+      <div class="text-[11px] font-mono uppercase tracking-[0.22em] text-fog">Project · Collaboration · Coffee</div>
+      <a href="mailto:hello@ticchien.dev" class="block mt-4 font-display text-ivory text-[34px] md:text-[58px] leading-[1.05] hover:text-vang transition">
+        hello@ticchien.dev
+      </a>
+      <div class="mt-12 grid grid-cols-2 md:grid-cols-3 gap-6 text-[12px] font-mono uppercase tracking-[0.18em]">
+        <div><div class="text-fog mb-2">Atelier</div><div class="text-ivory">Da Nang · 50000</div></div>
+        <div><div class="text-fog mb-2">Giờ</div><div class="text-ivory">T2 — T6 · 9–18</div></div>
+        <div><div class="text-fog mb-2">Cal</div><div class="text-ivory"><a href="#" class="underline-offset-4 hover:underline">Cal.com →</a></div></div>
+        <div><div class="text-fog mb-2">Code</div><div class="text-ivory"><a href="#" class="underline-offset-4 hover:underline">GitHub →</a></div></div>
+        <div><div class="text-fog mb-2">Blog</div><div class="text-ivory"><a href="#" class="underline-offset-4 hover:underline">Journal →</a></div></div>
+        <div><div class="text-fog mb-2">YouTube</div><div class="text-ivory"><a href="#" class="underline-offset-4 hover:underline">@ticchien ↗</a></div></div>
+      </div>
+    </div>
+
+    <div class="col-span-12 md:col-span-5 md:pl-10">
+      <form class="space-y-7 glass p-7 md:p-9 rounded-[22px]">
+        <div class="f-row form-row">
+          <label>Tên của bạn</label>
+          <input type="text" placeholder="Maria, Linh, ..." />
+        </div>
+        <div class="f-row form-row">
+          <label>Email</label>
+          <input type="email" placeholder="hi@studio.io" />
+        </div>
+        <div class="f-row form-row">
+          <label>Vài dòng về brief</label>
+          <textarea rows="4" placeholder="Mình đang launch ..."></textarea>
+        </div>
+        <button type="button" class="mag" data-magnetic>
+          <span class="label font-mono uppercase text-[11px] tracking-[0.22em]">Gửi · Send Brief</span>
+          <span class="label">↗</span>
+          <span class="glow"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ASCII signature -->
+  <div class="mt-24 lacquer"></div>
+  <footer class="pt-8 pb-2 flex flex-col md:flex-row gap-6 md:gap-0 items-start md:items-center justify-between text-[11px] font-mono uppercase tracking-[0.22em] text-fog">
+    <div>© MMXXVI · Ticchien · Crafted in Da nang <span class="vn-star ml-1"></span></div>
+    <div class="flex gap-6 text-ivory/80">
+      <a href="#" class="hover:text-ivory">Twitter</a>
+      <a href="#" class="hover:text-ivory">YouTube</a>
+      <a href="#" class="hover:text-ivory">GitHub</a>
+      <a href="#" class="hover:text-ivory">LinkedIn</a>
+    </div>
+    <div>
+      <span class="text-fog">Set in </span>
+      <span class="text-ivory font-display">Bricolage</span>
+      <span class="text-fog"> &amp; </span>
+      <span class="text-ivory font-serif-i">Instrument Serif</span>
+    </div>
+  </footer>
+
+  <!-- gigantic outro -->
+  <div aria-hidden="true" class="mt-12 -mx-5 md:-mx-10 overflow-hidden select-none">
+    <div class="font-display font-display-tight leading-none text-ivory whitespace-nowrap text-[28vw]" id="bigName">
+      TICCHIEN&nbsp;<span class="font-serif-i text-vang">·</span>&nbsp;DCH&nbsp;<span class="font-serif-i text-vang">·</span>&nbsp;
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ╭───────────── SCRIPTS ─────────────╮ -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+/* ╭───────────── THREE.JS CRYSTAL ─────────────╮ */
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const canvas = document.getElementById('crystal');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight, false);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(38, window.innerWidth/window.innerHeight, 0.1, 100);
+camera.position.set(0, 0, 7);
+
+/* Environment — RoomEnvironment + a custom red/gold backplate */
+const pmrem = new THREE.PMREMGenerator(renderer);
+const envScene = new RoomEnvironment();
+const envTex = pmrem.fromScene(envScene, 0.04).texture;
+scene.environment = envTex;
+
+/* Lights — color-tinted to give crystal a Saigon glow */
+const ambient = new THREE.AmbientLight(0xffffff, 0.25);
+scene.add(ambient);
+
+const sonLight = new THREE.PointLight(0xff4d5e, 2.4, 30);
+sonLight.position.set(-6, 4, 4);
+scene.add(sonLight);
+
+const vangLight = new THREE.PointLight(0xffc935, 2.0, 30);
+vangLight.position.set(6, -2, 3);
+scene.add(vangLight);
+
+const ngocLight = new THREE.PointLight(0x6bd4b8, 1.4, 30);
+ngocLight.position.set(0, 6, -4);
+scene.add(ngocLight);
+
+/* Crystal — dodecahedron (12-mặt) with refractive glass material */
+const geom = new THREE.DodecahedronGeometry(1.5, 0);
+const material = new THREE.MeshPhysicalMaterial({
+  color: 0xffffff,
+  transmission: 1.0,
+  thickness: 1.6,
+  roughness: 0.04,
+  metalness: 0.0,
+  ior: 1.5,
+  iridescence: 0.85,
+  iridescenceIOR: 1.35,
+  iridescenceThicknessRange: [100, 800],
+  clearcoat: 1.0,
+  clearcoatRoughness: 0.02,
+  attenuationColor: new THREE.Color(0xffe4b5),
+  attenuationDistance: 2.4,
+  envMapIntensity: 1.4,
+  specularIntensity: 1.0,
+});
+const crystal = new THREE.Mesh(geom, material);
+scene.add(crystal);
+
+/* Inner core — vermilion gem to give depth */
+const core = new THREE.Mesh(
+  new THREE.IcosahedronGeometry(0.55, 0),
+  new THREE.MeshPhysicalMaterial({
+    color: 0xE63946,
+    metalness: 0.6,
+    roughness: 0.18,
+    emissive: 0x661820,
+    emissiveIntensity: 0.6,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.05,
+  })
+);
+scene.add(core);
+
+/* Outer wireframe accent */
+const wire = new THREE.Mesh(
+  new THREE.DodecahedronGeometry(1.62, 0),
+  new THREE.MeshBasicMaterial({ color: 0xF4C430, wireframe: true, transparent:true, opacity:0.18 })
+);
+scene.add(wire);
+
+/* ─── Section anchors — where the crystal lives across the scroll ─── */
+const ANCHORS = [
+  // x [-1..1] · y [-1..1] · scale · rotXspeed · rotYspeed · rotZspeed
+  { sec:'#hero',        x:  0.55, y:  0.05, scale: 1.0,  rotX: 0.6, rotY: 0.8, rotZ: 0.3 },
+  { sec:'#about',       x: -0.55, y:  0.0,  scale: 0.55, rotX: 0.4, rotY: 1.2, rotZ: 0.2 },
+  { sec:'#disc',        x:  0.62, y:  0.0,  scale: 0.62, rotX: 0.7, rotY: 0.9, rotZ: 0.5 },
+  { sec:'#crystal-sec', x:  0.0,  y:  0.0,  scale: 1.6,  rotX: 1.5, rotY: 2.4, rotZ: 0.8 },
+  { sec:'#skills',      x: -0.55, y:  0.0,  scale: 0.5,  rotX: 0.5, rotY: 1.0, rotZ: 0.4 },
+  { sec:'#work',        x:  0.7,  y:  0.0,  scale: 0.45, rotX: 0.3, rotY: 0.6, rotZ: 0.2 },
+  { sec:'#exp',         x: -0.55, y:  0.0,  scale: 0.55, rotX: 0.4, rotY: 0.8, rotZ: 0.4 },
+  { sec:'#words',       x:  0.0,  y:  0.0,  scale: 0.45, rotX: 0.3, rotY: 0.5, rotZ: 0.3 },
+  { sec:'#contact',     x:  0.65, y:  0.0,  scale: 0.75, rotX: 0.6, rotY: 1.0, rotZ: 0.5 },
+];
+
+const state = {
+  x: 0.55, y: 0, scale: 1.0,
+  rx: 0, ry: 0, rz: 0,
+  scroll: 0,
+};
+
+/* update anchors based on scroll position */
+function updateAnchor(){
+  const sy = window.scrollY;
+  const vh = window.innerHeight;
+
+  // Find current and next section by their top positions
+  let cur = ANCHORS[0], next = ANCHORS[0], t = 0;
+  for (let i = 0; i < ANCHORS.length; i++){
+    const el = document.querySelector(ANCHORS[i].sec);
+    if (!el) continue;
+    const top = el.offsetTop - vh * 0.4;
+    if (sy >= top){
+      cur = ANCHORS[i];
+      next = ANCHORS[Math.min(i+1, ANCHORS.length-1)];
+      const nextEl = document.querySelector(next.sec);
+      const nextTop = nextEl ? nextEl.offsetTop - vh * 0.4 : top + vh;
+      t = (sy - top) / Math.max(1, nextTop - top);
+      t = Math.min(1, Math.max(0, t));
+    }
+  }
+
+  // Smooth interpolate towards target
+  const tx = cur.x + (next.x - cur.x) * t;
+  const ty = cur.y + (next.y - cur.y) * t;
+  const ts = cur.scale + (next.scale - cur.scale) * t;
+  state.x  += (tx - state.x) * 0.06;
+  state.y  += (ty - state.y) * 0.06;
+  state.scale += (ts - state.scale) * 0.06;
+
+  state.rx = sy * 0.0015 * (cur.rotX);
+  state.ry = sy * 0.0020 * (cur.rotY);
+  state.rz = sy * 0.0008 * (cur.rotZ);
+}
+
+/* ─── Animate ─── */
+const clock = new THREE.Clock();
+function render(){
+  const dt = clock.getDelta();
+  updateAnchor();
+
+  // Convert state.x[-1..1] to world X position based on camera frustum at the crystal depth
+  const dist = camera.position.z;
+  const halfH = Math.tan((camera.fov * Math.PI/180) / 2) * dist;
+  const halfW = halfH * camera.aspect;
+
+  const wx = state.x * halfW * 0.85;
+  const wy = state.y * halfH * 0.85;
+
+  crystal.position.set(wx, wy, 0);
+  core.position.set(wx, wy, 0);
+  wire.position.set(wx, wy, 0);
+
+  crystal.scale.setScalar(state.scale);
+  core.scale.setScalar(state.scale);
+  wire.scale.setScalar(state.scale * 1.02);
+
+  crystal.rotation.x = state.rx;
+  crystal.rotation.y = state.ry;
+  crystal.rotation.z = state.rz;
+  core.rotation.x = -state.rx * 1.4;
+  core.rotation.y = -state.ry * 1.2;
+  core.rotation.z = state.rz * 0.6;
+  wire.rotation.x = state.rx * 0.5 + performance.now() * 0.00015;
+  wire.rotation.y = state.ry * 0.5 + performance.now() * 0.00012;
+
+  // Slight float
+  const t = performance.now() * 0.001;
+  crystal.position.y += Math.sin(t * 0.6) * 0.07;
+  core.position.y    += Math.sin(t * 0.6) * 0.07;
+  wire.position.y    += Math.sin(t * 0.6) * 0.07;
+
+  renderer.render(scene, camera);
+  requestAnimationFrame(render);
+}
+render();
+
+/* Resize */
+window.addEventListener('resize', () => {
+  renderer.setSize(window.innerWidth, window.innerHeight, false);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+});
+</script>
+
+<script>
+/* ╭───────────── GSAP / SCROLLTRIGGER / LENIS ─────────────╮ */
+gsap.registerPlugin(ScrollTrigger);
+
+/* Lenis smooth scroll */
+const lenis = new Lenis({ duration: 1.15, smoothWheel: true, lerp: 0.09 });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((t) => lenis.raf(t * 1000));
+gsap.ticker.lagSmoothing(0);
+
+/* Cursor */
+(() => {
+  const c = document.getElementById('cursor');
+  const r = document.getElementById('cursorRing');
+  if (!c) return;
+  let x = innerWidth/2, y = innerHeight/2, rx = x, ry = y;
+  window.addEventListener('mousemove', e => { x = e.clientX; y = e.clientY; });
+  gsap.ticker.add(() => {
+    rx += (x - rx) * 0.18; ry += (y - ry) * 0.18;
+    c.style.transform = `translate(${x}px, ${y}px) translate(-50%,-50%)`;
+    r.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
+  });
+  document.querySelectorAll('a, button, [data-magnetic], .proj-card, .pcard').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('is-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('is-hover'));
+  });
+})();
+
+/* Magnetic */
+document.querySelectorAll('[data-magnetic]').forEach(el => {
+  const strength = 18;
+  el.addEventListener('mousemove', e => {
+    const r = el.getBoundingClientRect();
+    const mx = e.clientX - r.left, my = e.clientY - r.top;
+    gsap.to(el, { x: (mx - r.width/2)/r.width*strength, y: (my - r.height/2)/r.height*strength, duration: 0.6, ease: 'power3.out' });
+    el.style.setProperty('--mx', mx + 'px');
+    el.style.setProperty('--my', my + 'px');
+  });
+  el.addEventListener('mouseleave', () => gsap.to(el, { x:0, y:0, duration:0.7, ease:'elastic.out(1, 0.5)' }));
+});
+
+/* Local time */
+(() => {
+  const el = document.getElementById('localTime'); if (!el) return;
+  const tick = () => {
+    const d = new Date();
+    el.textContent = d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit', second:'2-digit' }) + ' ICT';
+  };
+  tick(); setInterval(tick, 1000);
+})();
+
+/* LOADER */
+const helloWords = ['Xin chào.', 'Hello.', 'Bonjour.', '你好.', 'こんにちは.', 'Xin chào.'];
+let hi = 0;
+const helloEl = document.querySelector('#hello span[data-hello]');
+const helloI = setInterval(() => {
+  if (!helloEl) return;
+  hi = (hi + 1) % helloWords.length;
+  helloEl.style.opacity = '0';
+  setTimeout(() => { helloEl.textContent = helloWords[hi]; helloEl.style.opacity = '1'; }, 220);
+}, 520);
+
+const loaderTL = gsap.timeline({ defaults: { ease: 'power3.out' } });
+const counter = { v: 0 };
+const labels  = ['Cutting the crystal', 'Hand-setting type', 'Tuning easing', 'Polishing surfaces', 'Mixing palette', 'Lighting the night'];
+let li = 0;
+const labelI = setInterval(() => {
+  const el = document.getElementById('loadLabel');
+  if (el) el.textContent = labels[li++ % labels.length];
+}, 380);
+
+loaderTL
+  .to('#loadBar i', { scaleX: 1, duration: 2.6, ease: 'power2.inOut' }, 0)
+  .to(counter, {
+    v: 100, duration: 2.6, ease: 'power2.inOut',
+    onUpdate: () => {
+      document.getElementById('loadPct').textContent = Math.floor(counter.v).toString().padStart(2,'0');
+    }
+  }, 0)
+  .add(() => { clearInterval(labelI); clearInterval(helloI); })
+  .to('#loader .panel.bottom', { scaleY: 0, duration: 1.0, ease: 'expo.inOut' }, '+=0.15')
+  .to('#loader .panel.top',    { scaleY: 0, duration: 1.0, ease: 'expo.inOut' }, '<')
+  .to('#hello, #loadBar, #loader .text-haze, #loader .text-fog', { opacity: 0, duration: 0.4 }, '<')
+  .set('#loader', { display: 'none' })
+  .add(() => intro());
+
+/* INTRO */
+function intro(){
+  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+  tl.from('header', { y: -30, opacity: 0, duration: 0.9 })
+    .from('.hero-meta-row > div', { y: 14, opacity: 0, duration: 0.7, stagger: 0.06 }, '<0.1')
+    .to('.clip-text .line .inner', { y: 0, duration: 1.2, stagger: 0.08 }, '<0.05')
+    .from('.hero-sub > *', { y: 22, opacity: 0, duration: 0.8, stagger: 0.08 }, '-=0.6')
+    .from('.hero-bottom', { opacity: 0, duration: 0.8 }, '<')
+    .from('.rail a', { x: 30, opacity: 0, duration: 0.6, stagger: 0.05 }, '-=0.6');
+}
+
+/* Marquee loop */
+(() => {
+  const m = document.getElementById('marquee');
+  if (!m) return;
+  m.innerHTML += m.innerHTML;
+  const w = m.scrollWidth / 2;
+  gsap.to(m, { x: -w, duration: 36, ease: 'none', repeat: -1, modifiers: { x: gsap.utils.unitize(v => parseFloat(v) % -w) } });
+})();
+
+/* Manifesto word-by-word reveal */
+(() => {
+  const wrap = document.querySelector('.manifesto-wrap p');
+  if (!wrap) return;
+  const tmp = document.createElement('div'); tmp.innerHTML = wrap.innerHTML;
+  function wrapWords(node){
+    if (node.nodeType === 3){
+      const frag = document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).forEach(p => {
+        if (/^\s+$/.test(p)) frag.appendChild(document.createTextNode(p));
+        else if (p){ const s = document.createElement('span'); s.className='mw'; s.style.display='inline-block'; s.textContent=p; frag.appendChild(s); }
+      });
+      node.parentNode.replaceChild(frag, node);
+    } else if (node.nodeType === 1){ Array.from(node.childNodes).forEach(wrapWords); }
+  }
+  Array.from(tmp.childNodes).forEach(wrapWords);
+  wrap.innerHTML = tmp.innerHTML;
+
+  gsap.from(wrap.querySelectorAll('.mw'), {
+    opacity: 0.08, duration: 0.4, stagger: 0.02, ease: 'none',
+    scrollTrigger: { trigger: wrap, start: 'top 80%', end: 'bottom 60%', scrub: 0.6 }
+  });
+})();
+
+/* About words */
+(() => {
+  const wrap = document.querySelector('.about-words');
+  if (!wrap) return;
+  const tmp = document.createElement('div'); tmp.innerHTML = wrap.innerHTML;
+  function wrapWords(node){
+    if (node.nodeType === 3){
+      const frag = document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).forEach(p => {
+        if (/^\s+$/.test(p)) frag.appendChild(document.createTextNode(p));
+        else if (p){ const s = document.createElement('span'); s.className='aw'; s.style.display='inline-block'; s.textContent=p; frag.appendChild(s); }
+      });
+      node.parentNode.replaceChild(frag, node);
+    } else if (node.nodeType === 1){ Array.from(node.childNodes).forEach(wrapWords); }
+  }
+  Array.from(tmp.childNodes).forEach(wrapWords);
+  wrap.innerHTML = tmp.innerHTML;
+
+  gsap.from(wrap.querySelectorAll('.aw'), {
+    opacity: 0.12, duration: 0.4, stagger: 0.015, ease:'none',
+    scrollTrigger: { trigger: wrap, start: 'top 78%', end: 'bottom 55%', scrub: 0.5 }
+  });
+})();
+
+/* Discipline cards reveal */
+(() => {
+  gsap.utils.toArray('.disc-card').forEach((card, i) => {
+    gsap.from(card, {
+      y: 40, opacity: 0, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none reverse' }
+    });
+  });
+})();
+
+/* Crystal pinned section */
+(() => {
+  const pin = document.getElementById('crystalPin');
+  if (!pin) return;
+  ScrollTrigger.create({
+    trigger: '#crystal-sec',
+    start: 'top top',
+    end:   '+=80%',
+    pin: pin,
+    pinSpacing: true,
+    anticipatePin: 1,
+  });
+
+  // facets fade in/out
+  gsap.from('#crystalFacets .facet', {
+    opacity: 0, x: 40, duration: 0.6, stagger: 0.06, ease: 'power3.out',
+    scrollTrigger: { trigger: '#crystal-sec', start: 'top 60%' }
+  });
+  gsap.from('.c-left > *', {
+    opacity: 0, y: 30, duration: 0.8, stagger: 0.07, ease: 'power3.out',
+    scrollTrigger: { trigger: '#crystal-sec', start: 'top 70%' }
+  });
+})();
+
+/* Skills rings + bars + counters */
+(() => {
+  document.querySelectorAll('[data-skill]').forEach(card => {
+    const pct  = parseFloat(card.dataset.pct);
+    const ring = card.querySelector('.ring-fill');
+    const num  = card.querySelector('[data-count]');
+    const len  = 326.7;
+    const target = len - (len * pct / 100);
+
+    gsap.to(ring, {
+      strokeDashoffset: target, duration: 1.6, ease: 'power3.out',
+      scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none reverse' }
+    });
+    if (num){
+      const obj = { v: 0 };
+      gsap.to(obj, {
+        v: pct, duration: 1.6, ease: 'power3.out',
+        onUpdate: () => num.textContent = Math.round(obj.v),
+        scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none reverse' }
+      });
+    }
+    gsap.from(card, {
+      y: 30, opacity: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: card, start: 'top 88%', toggleActions: 'play none none reverse' }
+    });
+  });
+
+  document.querySelectorAll('[data-bar]').forEach(bar => {
+    const target = parseFloat(bar.dataset.bar);
+    gsap.to(bar, {
+      scaleX: target, duration: 1.6, ease: 'expo.out',
+      scrollTrigger: { trigger: bar, start: 'top 92%', toggleActions: 'play none none reverse' }
+    });
+  });
+
+  /* Big numeric counters in About + Stats */
+  document.querySelectorAll('[data-count]').forEach(el => {
+    if (el.closest('[data-skill]')) return; // already handled
+    const end = parseFloat(el.dataset.count);
+    const obj = { v: 0 };
+    gsap.to(obj, {
+      v: end, duration: 1.8, ease: 'power3.out',
+      onUpdate: () => el.textContent = Math.round(obj.v),
+      scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' }
+    });
+  });
+})();
+
+/* Experience timeline */
+(() => {
+  gsap.utils.toArray('.exp-item').forEach(it => {
+    gsap.from(it, { opacity: 0, y: 30, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: it, start: 'top 80%', toggleActions: 'play none none reverse' }
+    });
+    gsap.from(it.querySelector('.exp-dot'), { scale: 0, duration: 0.6, ease: 'back.out(2)',
+      scrollTrigger: { trigger: it, start: 'top 80%' }
+    });
+  });
+  gsap.to('#expProgress', { height: '100%', ease: 'none',
+    scrollTrigger: { trigger: '#exp', start: 'top 60%', end: 'bottom 70%', scrub: 0.4 }
+  });
+})();
+
+/* Project hover glow */
+document.querySelectorAll('.proj-card, .pcard').forEach(el => {
+  el.addEventListener('mousemove', e => {
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--gx', ((e.clientX - r.left)/r.width)*100 + '%');
+    el.style.setProperty('--gy', ((e.clientY - r.top)/r.height)*100 + '%');
+  });
+});
+
+/* Testimonials carousel */
+(() => {
+  const track = document.getElementById('tTrack');
+  const inner = document.getElementById('tInner');
+  if (!track || !inner) return;
+  const cards = inner.querySelectorAll('.tcard');
+  let idx = 0;
+
+  function go(n){
+    idx = Math.max(0, Math.min(cards.length - 1, n));
+    const card = cards[idx];
+    const target = -card.offsetLeft + 40;
+    gsap.to(inner, { x: target, duration: 1.1, ease: 'expo.out' });
+  }
+  document.getElementById('tNext').addEventListener('click', () => go(idx + 1));
+  document.getElementById('tPrev').addEventListener('click', () => go(idx - 1));
+
+  gsap.from(cards, {
+    y: 40, opacity: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out',
+    scrollTrigger: { trigger: track, start: 'top 80%', toggleActions: 'play none none reverse' }
+  });
+
+  let down = false, startX = 0, startTX = 0;
+  inner.addEventListener('pointerdown', e => {
+    down = true; startX = e.clientX;
+    startTX = gsap.getProperty(inner, 'x');
+    inner.setPointerCapture(e.pointerId);
+  });
+  inner.addEventListener('pointermove', e => {
+    if (!down) return;
+    gsap.set(inner, { x: startTX + (e.clientX - startX) });
+  });
+  inner.addEventListener('pointerup', () => {
+    down = false;
+    const tx = gsap.getProperty(inner, 'x');
+    let nearest = 0, best = Infinity;
+    cards.forEach((c, i) => {
+      const t = -c.offsetLeft + 40;
+      const d = Math.abs(t - tx);
+      if (d < best){ best = d; nearest = i; }
+    });
+    go(nearest);
+  });
+  inner.addEventListener('pointercancel', () => { down = false; });
+  window.addEventListener('resize', () => go(idx));
+})();
+
+/* Contact reveal */
+(() => {
+  gsap.set('.contact-h .clip-text .line .inner', { y: '110%' });
+  ScrollTrigger.create({
+    trigger: '#contact', start: 'top 70%',
+    onEnter: () => gsap.to('.contact-h .clip-text .line .inner', { y: 0, duration: 1.2, stagger: 0.1, ease: 'expo.out' }),
+    onLeaveBack: () => gsap.to('.contact-h .clip-text .line .inner', { y: '110%', duration: 0.6, ease: 'power3.in' })
+  });
+  gsap.to('#bigName', {
+    xPercent: -25, ease: 'none',
+    scrollTrigger: { trigger: '#bigName', start: 'top bottom', end: 'bottom top', scrub: 0.8 }
+  });
+  gsap.from('.form-row', {
+    y: 24, opacity: 0, stagger: 0.08, duration: 0.8, ease: 'power3.out',
+    scrollTrigger: { trigger: 'form', start: 'top 80%' }
+  });
+})();
+
+/* Right rail */
+(() => {
+  const rail = document.getElementById('rail'); if (!rail) return;
+  const links = rail.querySelectorAll('a');
+  const map = new Map();
+  links.forEach(a => map.set(a.getAttribute('href').slice(1), a));
+
+  ['top','about','disc','crystal-sec','skills','work','exp','words','contact'].forEach(id => {
+    const sec = document.getElementById(id); if (!sec) return;
+    ScrollTrigger.create({
+      trigger: sec, start: 'top 50%', end: 'bottom 50%',
+      onToggle: self => {
+        if (self.isActive){
+          links.forEach(l => l.classList.remove('active'));
+          map.get(id)?.classList.add('active');
+        }
+      }
+    });
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id); if (!el) return;
+      e.preventDefault();
+      lenis.scrollTo(el, { duration: 1.4, lock: true });
+    });
+  });
+})();
+
+/* Refresh ScrollTrigger */
+window.addEventListener('load', () => ScrollTrigger.refresh());
+window.addEventListener('resize', () => ScrollTrigger.refresh());
+</script>
+</body>
+</html>
