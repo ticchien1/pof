@@ -53,11 +53,13 @@
 }
 
 *{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-html, body{ background:var(--ink); color:var(--ivory); }
+html, body{ background:var(--ink); color:var(--ivory); width:100%; max-width:100%; overflow-x:hidden; overscroll-behavior-x:none; }
 body{
   font-family:'Bricolage Grotesque', system-ui, sans-serif;
   font-variation-settings:"opsz" 16, "wdth" 100;
   overflow-x:hidden;
+  max-width:100vw;
+  touch-action: pan-y;
 }
 ::selection{ background:var(--son); color:var(--ivory); }
 ::-webkit-scrollbar{ width:0; height:0; }
@@ -360,6 +362,19 @@ a:focus-visible, button:focus-visible{ outline:1px solid var(--vang); outline-of
 
 /* Disable cursor on touch */
 @media (hover: none){ .grain::before{ opacity:.04; } }
+@media (max-width: 768px){
+  .grain::before{ display:none; }
+  .glass, #mobileMenu{
+    backdrop-filter: blur(10px) saturate(1.15);
+    -webkit-backdrop-filter: blur(10px) saturate(1.15);
+  }
+  .bg-saigon{
+    background:
+      radial-gradient(80% 52% at 75% 18%, rgba(230,57,70,.16), transparent 62%),
+      radial-gradient(60% 42% at 12% 82%, rgba(244,196,48,.10), transparent 62%),
+      var(--ink);
+  }
+}
 </style>
 </head>
 <body class="bg-saigon grain">
@@ -1484,7 +1499,8 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const canvas = document.getElementById('crystal');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+const isMobile = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: !isMobile, alpha: true, powerPreference: 'high-performance' });
 function viewportSize(){
   const vv = window.visualViewport;
   return {
@@ -1493,7 +1509,7 @@ function viewportSize(){
   };
 }
 const view = viewportSize();
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.25 : 2));
 renderer.setSize(view.w, view.h, false);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.15;
@@ -1601,8 +1617,9 @@ floorGlow.position.z = -0.8;
 scene.add(floorGlow);
 
 /* Ember dust — subtle glow particles around the loaded crystal */
-const emberPositions = new Float32Array(64 * 3);
-for (let i = 0; i < 64; i++){
+const emberCount = isMobile ? 24 : 64;
+const emberPositions = new Float32Array(emberCount * 3);
+for (let i = 0; i < emberCount; i++){
   const a = i * 2.399963;
   const radius = 1.65 + (i % 9) * 0.08;
   emberPositions[i*3 + 0] = Math.cos(a) * radius;
@@ -1673,7 +1690,14 @@ function updateAnchor(){
 
 /* ─── Animate ─── */
 const clock = new THREE.Clock();
+let lastRender = 0;
 function render(){
+  const now = performance.now();
+  if (isMobile && now - lastRender < 33){
+    requestAnimationFrame(render);
+    return;
+  }
+  lastRender = now;
   const dt = clock.getDelta();
   updateAnchor();
 
@@ -1719,14 +1743,13 @@ function resizeCrystal(){
   const { w, h } = viewportSize();
   canvas.style.width = `${w}px`;
   canvas.style.height = `${h}px`;
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.25 : 2));
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
 }
 window.addEventListener('resize', resizeCrystal);
 window.visualViewport?.addEventListener('resize', resizeCrystal);
-window.visualViewport?.addEventListener('scroll', resizeCrystal);
 </script>
 
 <script>
@@ -1734,7 +1757,13 @@ window.visualViewport?.addEventListener('scroll', resizeCrystal);
 gsap.registerPlugin(ScrollTrigger);
 
 /* Lenis smooth scroll */
-const lenis = new Lenis({ duration: 1.15, smoothWheel: true, lerp: 0.09 });
+const isTouchDevice = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+const lenis = new Lenis({
+  duration: isTouchDevice ? 0.75 : 1.15,
+  smoothWheel: !isTouchDevice,
+  smoothTouch: false,
+  lerp: isTouchDevice ? 0.16 : 0.09,
+});
 lenis.on('scroll', ScrollTrigger.update);
 gsap.ticker.add((t) => lenis.raf(t * 1000));
 gsap.ticker.lagSmoothing(0);
