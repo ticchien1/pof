@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bảng báo giá website doanh nghiệp · 16.000.000 VNĐ</title>
+  <meta name="description" content="Bảng báo giá thiết kế và lập trình website doanh nghiệp WordPress CMS, giao diện light chuyên nghiệp, hiện đại, tinh gọn." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --paper:#ffffff;
+      --paper-2:#ffffff;
+      --porcelain:rgba(14,36,73,.045);
+      --ink:#0e2449;
+      --muted:#53627a;
+      --soft:#7b8799;
+      --line:rgba(250,159,24,.14);
+      --line-strong:rgba(250,159,24,.16);
+      --brand:#fa9f18;
+      --brand-dark:#0e2449;
+      --sage:#fa9f18;
+      --navy:#0e2449;
+      --gold:#fa9f18;
+      --danger:#a24c2c;
+      --radius:28px;
+      --shadow:0 24px 70px rgba(14,36,73,.12);
+      --shadow-soft:0 14px 42px rgba(14,36,73,.08);
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; background:var(--paper); color:var(--ink); }
+    body{
+      margin:0;
+      min-width:320px;
+      font-family:"Be Vietnam Pro", system-ui, sans-serif;
+      background:#ffffff;
+      overflow-x:hidden;
+      text-rendering:optimizeLegibility;
+      -webkit-font-smoothing:antialiased;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:-2;
+      background-image:
+        linear-gradient(rgba(14,36,73,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14,36,73,.025) 1px, transparent 1px);
+      background-size:72px 72px;
+      opacity:.24;
+      mask-image:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.24) 55%, transparent 94%);
+      pointer-events:none;
+    }
+    body::after{
+      content:"";
+      position:fixed;
+      inset:-40%;
+      z-index:-1;
+      pointer-events:none;
+      opacity:.05;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='190'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.38'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    button{ font:inherit; }
+    .wrap{ width:min(1180px, calc(100vw - 42px)); margin-inline:auto; }
+    .accent{ color:var(--brand); font-weight:800; }
+    .caps{ font-size:11px; font-weight:700; line-height:1.3; letter-spacing:.14em; text-transform:uppercase; }
+    .muted{ color:var(--muted); }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.88);
+      backdrop-filter:blur(18px) saturate(1.25);
+      -webkit-backdrop-filter:blur(18px) saturate(1.25);
+    }
+    .topbar-inner{
+      min-height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:13px;
+      font-size:15px;
+      font-weight:800;
+      letter-spacing:-.03em;
+    }
+    .brand-mark{
+      width:38px;
+      height:38px;
+      display:grid;
+      place-items:center;
+      border:1px solid var(--line-strong);
+      border-radius:12px;
+      background:
+        linear-gradient(135deg, rgba(14,36,73,.14), rgba(255,255,255,.18)),
+        var(--paper);
+      box-shadow:0 10px 26px rgba(250,159,24,.18);
+    }
+    .brand-mark::before{
+      content:"";
+      width:14px;
+      height:14px;
+      border:3px solid var(--brand-dark);
+      border-top-color:transparent;
+      border-left-color:transparent;
+      transform:rotate(45deg);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:22px;
+      color:var(--muted);
+    }
+    .nav a{ transition:color .2s ease; }
+    .nav a:hover{ color:var(--brand-dark); }
+    .nav-actions{ display:flex; align-items:center; gap:10px; }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      min-height:42px;
+      padding:0 16px;
+      border-radius:999px;
+      border:1px solid var(--line-strong);
+      background:rgba(255,255,255,.52);
+      color:var(--ink);
+      cursor:pointer;
+      box-shadow:0 8px 24px rgba(14,36,73,.06);
+      transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .btn:hover{ transform:translateY(-1px); box-shadow:0 12px 30px rgba(14,36,73,.11); background:#fff; }
+    .btn-primary{ border-color:rgba(250,159,24,.36); background:var(--ink); color:#ffffff; }
+    .btn-primary:hover{ background:#25302f; }
+
+    .hero{ padding:76px 0 48px; }
+    .hero-layout{
+      display:grid;
+      grid-template-columns:minmax(0, 1.12fr) minmax(360px, .88fr);
+      gap:38px;
+      align-items:stretch;
+    }
+    .hero-copy{
+      position:relative;
+      min-height:580px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding:42px;
+      border:1px solid rgba(250,159,24,.16);
+      border-radius:36px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.9), rgba(255,255,255,.38)),
+        radial-gradient(520px 300px at 8% 8%, rgba(14,36,73,.07), transparent 62%);
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+    }
+    .hero-copy::after{
+      content:"";
+      position:absolute;
+      right:-110px;
+      top:84px;
+      width:310px;
+      height:310px;
+      border-radius:60px;
+      border:1px solid rgba(250,159,24,.22);
+      transform:rotate(18deg);
+      background:linear-gradient(135deg, rgba(14,36,73,.10), rgba(255,255,255,.18));
+    }
+    .eyebrow{
+      width:max-content;
+      max-width:100%;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:9px 13px;
+      border:1px solid rgba(250,159,24,.14);
+      border-radius:999px;
+      background:rgba(250,159,24,.16);
+      color:var(--brand-dark);
+      position:relative;
+      z-index:1;
+    }
+    .eyebrow i{
+      width:7px;
+      height:7px;
+      border-radius:99px;
+      background:var(--brand);
+      box-shadow:0 0 0 6px rgba(250,159,24,.12);
+    }
+    h1{
+      position:relative;
+      z-index:1;
+      max-width:850px;
+      margin:34px 0 0;
+      font-size:clamp(48px, 7.7vw, 104px);
+      line-height:.91;
+      letter-spacing:-.075em;
+    }
+    .lead{
+      position:relative;
+      z-index:1;
+      max-width:710px;
+      margin:26px 0 0;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.78;
+    }
+    .lead strong{ color:var(--ink); font-weight:800; }
+    .hero-foot{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:12px;
+      margin-top:48px;
+    }
+    .mini-stat{
+      min-height:108px;
+      padding:18px;
+      border:1px solid rgba(250,159,24,.14);
+      border-radius:22px;
+      background:rgba(255,255,255,.52);
+    }
+    .mini-stat b{ display:block; margin-bottom:8px; font-size:22px; letter-spacing:-.05em; }
+    .mini-stat span{ color:var(--muted); font-size:13px; line-height:1.55; }
+
+    .quote-card{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      min-height:580px;
+      border:1px solid rgba(250,159,24,.14);
+      border-radius:36px;
+      overflow:hidden;
+      background:
+        radial-gradient(460px 360px at 96% 0%, rgba(14,36,73,.16), transparent 64%),
+        linear-gradient(180deg, #ffffff 0%, rgba(14,36,73,.055) 100%);
+      box-shadow:var(--shadow);
+    }
+    .quote-card::before{
+      content:"";
+      position:absolute;
+      inset:20px;
+      border:1px solid rgba(250,159,24,.18);
+      border-radius:26px;
+      pointer-events:none;
+    }
+    .quote-top{ padding:34px 34px 18px; }
+    .proposal-id{
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      color:var(--soft);
+      margin-bottom:48px;
+    }
+    .total-label{ color:var(--brand-dark); }
+    .total-price{
+      margin:10px 0 0;
+      font-size:clamp(54px, 7vw, 86px);
+      line-height:.86;
+      letter-spacing:-.075em;
+      font-weight:800;
+    }
+    .total-price span{
+      display:inline-block;
+      margin-left:4px;
+      font-size:.28em;
+      letter-spacing:.02em;
+      color:var(--brand);
+      vertical-align:baseline;
+    }
+    .quote-note{
+      margin:20px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.7;
+    }
+    .platform{
+      margin:26px 34px 0;
+      padding:18px;
+      border:1px solid rgba(250,159,24,.14);
+      border-radius:22px;
+      background:rgba(255,255,255,.5);
+    }
+    .platform strong{ display:block; margin-top:7px; font-size:24px; letter-spacing:-.05em; }
+    .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:15px; }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:8px 10px;
+      border:1px solid rgba(250,159,24,.14);
+      border-radius:999px;
+      background:rgba(255,255,255,.58);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:600;
+    }
+    .chip::before{
+      content:"";
+      width:6px;
+      height:6px;
+      border-radius:99px;
+      background:var(--sage);
+    }
+    .quote-bottom{
+      margin-top:auto;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      border-top:1px solid rgba(250,159,24,.18);
+    }
+    .quote-bottom > div{ padding:22px 28px; }
+    .quote-bottom > div + div{ border-left:1px solid rgba(250,159,24,.18); }
+    .quote-bottom b{ display:block; font-size:19px; letter-spacing:-.04em; }
+    .quote-bottom span{ display:block; margin-top:6px; color:var(--muted); font-size:12px; line-height:1.5; }
+
+    section{ padding:52px 0; }
+    .section-title{
+      display:grid;
+      grid-template-columns:minmax(0, .86fr) minmax(280px, .54fr);
+      align-items:end;
+      gap:32px;
+      margin-bottom:24px;
+    }
+    .section-title h2{
+      margin:0;
+      font-size:clamp(34px, 5vw, 68px);
+      line-height:.94;
+      letter-spacing:-.064em;
+    }
+    .section-title p{ margin:0; color:var(--muted); line-height:1.75; }
+
+    .cost-grid{
+      display:grid;
+      grid-template-columns:1fr 1.35fr 1fr;
+      gap:16px;
+    }
+    .cost-card{
+      position:relative;
+      min-height:270px;
+      padding:26px;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:rgba(255,255,255,.56);
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+    }
+    .cost-card.featured{
+      background:
+        linear-gradient(135deg, rgba(14,36,73,.96), rgba(14,36,73,.88)),
+        var(--ink);
+      color:#ffffff;
+      border-color:rgba(14,36,73,.26);
+      box-shadow:0 28px 70px rgba(14,36,73,.22);
+    }
+    .cost-card.featured p, .cost-card.featured .cost-kicker{ color:rgba(255,255,255,.72); }
+    .cost-card::after{
+      content:"";
+      position:absolute;
+      right:-56px;
+      bottom:-70px;
+      width:178px;
+      height:178px;
+      border-radius:50%;
+      background:rgba(250,159,24,.18);
+      pointer-events:none;
+    }
+    .cost-kicker{ color:var(--brand-dark); }
+    .cost-card h3{ margin:18px 0 0; font-size:27px; line-height:1.08; letter-spacing:-.05em; }
+    .cost-money{ margin-top:20px; font-size:36px; line-height:1; font-weight:800; letter-spacing:-.065em; }
+    .cost-card.featured .cost-money{ font-size:44px; color:var(--gold); }
+    .cost-card p{ margin:18px 0 0; color:var(--muted); line-height:1.66; font-size:14px; }
+    .gift-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top:18px;
+      padding:10px 12px;
+      border-radius:999px;
+      background:rgba(14,36,73,.06);
+      color:var(--sage);
+      border:1px solid rgba(250,159,24,.22);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .page-grid{
+      display:grid;
+      grid-template-columns:repeat(7, minmax(0, 1fr));
+      gap:10px;
+    }
+    .page-card{
+      position:relative;
+      min-height:218px;
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      border:1px solid var(--line);
+      border-radius:24px;
+      background:rgba(255,255,255,.58);
+      box-shadow:0 8px 26px rgba(14,36,73,.05);
+      transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+    .page-card:hover{ transform:translateY(-4px); border-color:rgba(250,159,24,.32); box-shadow:var(--shadow-soft); }
+    .page-no{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:36px;
+      height:36px;
+      border-radius:13px;
+      background:var(--porcelain);
+      border:1px solid var(--line);
+      color:var(--brand-dark);
+    }
+    .page-card h3{ margin:28px 0 9px; font-size:20px; line-height:1.12; letter-spacing:-.045em; }
+    .page-card p{ margin:0; color:var(--muted); font-size:13px; line-height:1.62; }
+
+    .content-panel{
+      display:grid;
+      grid-template-columns:.92fr 1.08fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .panel{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:rgba(255,255,255,.58);
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+    }
+    .panel-head{
+      padding:24px 26px;
+      border-bottom:1px solid var(--line);
+      background:rgba(14,36,73,.045);
+    }
+    .panel-head h3{ margin:8px 0 0; font-size:28px; letter-spacing:-.052em; }
+    .check-list{ margin:0; padding:10px 0; list-style:none; }
+    .check-list li{
+      display:grid;
+      grid-template-columns:28px 1fr;
+      gap:12px;
+      padding:16px 26px;
+      border-bottom:1px solid rgba(250,159,24,.18);
+      color:var(--muted);
+      line-height:1.62;
+    }
+    .check-list li:last-child{ border-bottom:0; }
+    .check-list li::before{
+      content:"✓";
+      display:grid;
+      place-items:center;
+      width:26px;
+      height:26px;
+      border-radius:50%;
+      background:rgba(14,36,73,.07);
+      color:var(--sage);
+      font-weight:800;
+    }
+    .check-list strong{ color:var(--ink); }
+
+    .roadmap{
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:16px;
+    }
+    .roadmap::before{
+      content:"";
+      position:absolute;
+      left:8%;
+      right:8%;
+      top:42px;
+      height:1px;
+      background:linear-gradient(90deg, transparent, var(--line-strong), transparent);
+    }
+    .step{
+      position:relative;
+      padding:0;
+    }
+    .step-dot{
+      position:relative;
+      z-index:1;
+      width:84px;
+      height:84px;
+      display:grid;
+      place-items:center;
+      margin:0 auto 14px;
+      border-radius:50%;
+      border:1px solid rgba(250,159,24,.3);
+      background:linear-gradient(180deg, #ffffff, rgba(14,36,73,.07));
+      box-shadow:0 16px 34px rgba(14,36,73,.12);
+      color:var(--brand-dark);
+      font-size:15px;
+      font-weight:800;
+    }
+    .step-card{
+      min-height:260px;
+      padding:24px;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:rgba(255,255,255,.58);
+      box-shadow:0 10px 30px rgba(14,36,73,.06);
+    }
+    .step-card h3{ margin:0 0 10px; font-size:23px; line-height:1.16; letter-spacing:-.045em; }
+    .step-card p{ margin:0; color:var(--muted); line-height:1.66; font-size:14px; }
+    .duration{
+      display:inline-flex;
+      margin-top:18px;
+      color: white;
+      background:var(--brand-dark);
+      border:1px solid rgba(250,159,24,.17);
+      border-radius:999px;
+      padding:8px 10px;
+    }
+
+    .summary-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .total-table{
+      border:1px solid rgba(250,159,24,.14);
+      border-radius:32px;
+      overflow:hidden;
+      background:
+        radial-gradient(460px 260px at 100% 0%, rgba(14,36,73,.10), transparent 64%),
+        rgba(255,255,255,.68);
+      box-shadow:var(--shadow);
+    }
+    .line-row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:22px;
+      align-items:center;
+      padding:20px 26px;
+      border-bottom:1px solid rgba(250,159,24,.20);
+    }
+    .line-row span{ color:var(--muted); line-height:1.5; }
+    .line-row strong{ font-size:20px; letter-spacing:-.04em; white-space:nowrap; }
+    .line-row.gift strong{ color:var(--sage); }
+    .line-row.total{
+      padding:26px;
+      background:var(--ink);
+      color:#ffffff;
+      border-bottom:0;
+    }
+    .line-row.total span{ color:rgba(255,255,255,.68); }
+    .line-row.total strong{ font-size:34px; color:var(--gold); }
+    .closing{
+      min-height:100%;
+      padding:32px;
+      border:1px solid var(--line);
+      border-radius:32px;
+      background:rgba(255,255,255,.58);
+      box-shadow:var(--shadow-soft);
+    }
+    .closing h3{ margin:0; font-size:36px; line-height:1.02; letter-spacing:-.06em; }
+    .closing p{ margin:18px 0 0; color:var(--muted); line-height:1.78; }
+    .signature{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:18px;
+      align-items:end;
+      margin-top:34px;
+      padding-top:22px;
+      border-top:1px solid var(--line);
+    }
+    .signature small{ display:block; color:var(--soft); line-height:1.6; }
+    .seal{
+      width:92px;
+      height:92px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      border:1px solid rgba(250,159,24,.16);
+      color:var(--brand-dark);
+      background:rgba(250,159,24,.16);
+      text-align:center;
+      transform:rotate(-8deg);
+    }
+
+    .reveal{ opacity:0; transform:translateY(18px); animation:rise .72s cubic-bezier(.2,.8,.2,1) forwards; }
+    .d1{ animation-delay:.08s; } .d2{ animation-delay:.16s; } .d3{ animation-delay:.24s; } .d4{ animation-delay:.32s; }
+    @keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+
+    @media (max-width:1100px){
+      .hero-layout, .section-title, .content-panel, .summary-grid{ grid-template-columns:1fr; }
+      .hero-copy, .quote-card{ min-height:auto; }
+      .page-grid{ grid-template-columns:repeat(3, 1fr); }
+      .cost-grid{ grid-template-columns:1fr; }
+      .roadmap{ grid-template-columns:repeat(2, 1fr); }
+      .roadmap::before{ display:none; }
+    }
+    @media (max-width:760px){
+      .wrap{ width:min(100% - 28px, 1180px); }
+      .topbar-inner{ min-height:64px; }
+      .nav{ display:none; }
+      .brand span:last-child{ max-width:190px; }
+      .btn-primary{ display:none; }
+      .hero{ padding:42px 0 28px; }
+      .hero-copy{ padding:26px; border-radius:28px; }
+      .hero-foot, .quote-bottom, .page-grid, .roadmap{ grid-template-columns:1fr; }
+      .quote-top{ padding:28px 24px 16px; }
+      .proposal-id{ margin-bottom:34px; }
+      .platform{ margin:22px 24px 0; }
+      section{ padding:36px 0; }
+      .section-title{ gap:16px; }
+      .cost-card, .panel-head, .closing{ padding:22px; }
+      .check-list li{ padding:15px 22px; }
+      .line-row{ grid-template-columns:1fr; gap:8px; }
+      .line-row strong{ white-space:normal; }
+      .signature{ grid-template-columns:1fr; }
+    }
+
+    @media print{
+      @page{ margin:14mm; }
+      html, body{ background:#fff; color:#111; }
+      body::before, body::after, .topbar{ display:none; }
+      .wrap{ width:100%; }
+      .hero, section{ padding:14px 0; }
+      .hero-layout, .section-title, .content-panel, .summary-grid{ grid-template-columns:1fr; }
+      .hero-copy, .quote-card, .cost-card, .page-card, .panel, .step-card, .total-table, .closing{
+        box-shadow:none !important;
+        background:#fff !important;
+        border-color:#cfcfcf !important;
+        break-inside:avoid;
+      }
+      .hero-copy{ min-height:auto; padding:20px; }
+      h1{ font-size:48px; }
+      .total-price{ font-size:54px; }
+      .cost-grid, .page-grid, .roadmap{ grid-template-columns:1fr 1fr; }
+      .roadmap::before{ display:none; }
+      .line-row.total{ background:#111 !important; color:#fff; }
+      a[href]::after{ content:""; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#top" aria-label="Bảng báo giá website doanh nghiệp">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>Bảng báo giá Website Doanh nghiệp</span>
+      </a>
+      <nav class="nav caps" aria-label="Điều hướng nhanh">
+        <a href="#cost">Chi phí</a>
+        <a href="#pages">Cấu trúc</a>
+        <a href="#roadmap">Lộ trình</a>
+        <a href="#summary">Tổng kết</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="btn caps" type="button" onclick="window.print()">In / PDF</button>
+        <a class="btn btn-primary caps" href="#summary">Xem tổng kết</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero-layout">
+        <div class="hero-copy reveal">
+          <div>
+            <div class="eyebrow caps"><i aria-hidden="true"></i> Proposal · WordPress CMS · Theme light</div>
+            <h1 id="hero-title">Website <br> <span class="accent">chuyên nghiệp</span>, tinh tế</h1>
+            <p class="lead">
+              Gói triển khai website giới thiệu doanh nghiệp theo phong cách hiện đại, quy mô tinh gọn, phù hợp hình ảnh
+              <strong>nhà thầu thi công</strong>. Giao diện light, bố cục tường minh, font chuẩn tiếng Việt và hệ thống nội dung dễ quản trị bằng <strong>WordPress CMS</strong>.
+            </p>
+          </div>
+
+          <div class="hero-foot" aria-label="Thông tin nổi bật">
+            <div class="mini-stat">
+              <b>7</b>
+              <span>Nhóm trang chính, bao gồm dự án, tin tức, tuyển dụng và liên hệ.</span>
+            </div>
+            <div class="mini-stat">
+              <b>Light UI</b>
+              <span>Nền sáng, nhiều khoảng thở, tối ưu việc đọc và tiếp nhận thông tin.</span>
+            </div>
+            <div class="mini-stat">
+              <b>CMS</b>
+              <span>Quản trị nội dung sau bàn giao bằng WordPress, phù hợp vận hành lâu dài.</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="quote-card reveal d1" aria-label="Chi phí khách hàng thanh toán">
+          <div class="quote-top">
+            <div class="proposal-id caps">
+              <span>Báo giá dự kiến</span>
+              <span>2026</span>
+            </div>
+            <div class="total-label caps">Khách hàng cần thanh toán</div>
+            <div class="total-price">16.000.000 <span>VNĐ</span></div>
+            <p class="quote-note">
+              Tổng giá trị triển khai là 17.000.000 VNĐ. Tên miền & hosting năm đầu trị giá 1.000.000 VNĐ được tặng kèm, nên chi phí khách hàng thanh toán còn 16.000.000 VNĐ.
+            </p>
+          </div>
+
+          <div class="platform">
+            <div class="caps muted">Nền tảng đề xuất</div>
+            <strong>WordPress CMS</strong>
+            <div class="chips">
+              <span class="chip">Dễ quản trị</span>
+              <span class="chip">Chuẩn responsive</span>
+              <span class="chip">SEO cơ bản</span>
+              <span class="chip">Mở rộng nội dung</span>
+            </div>
+          </div>
+
+          <div class="quote-bottom">
+            <div>
+              <b>3.000.000</b>
+              <span>Thiết kế giao diện & hệ visual background riêng</span>
+            </div>
+            <div>
+              <b>13.000.000</b>
+              <span>Lập trình, cấu hình CMS, tối ưu vận hành</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="cost" aria-labelledby="cost-title">
+      <div class="wrap">
+        <div class="section-title reveal">
+          <h2 id="cost-title">Phân bổ <span class="accent">chi phí</span></h2>
+          <p>Chi phí được trình bày thành các nhóm rõ ràng để khách hàng dễ nắm phạm vi triển khai, giá trị từng phần và hạng mục được tặng trong năm đầu.</p>
+        </div>
+
+        <div class="cost-grid">
+          <article class="cost-card reveal d1">
+            <div class="cost-kicker caps">01 · Thiết kế</div>
+            <h3>Giao diện, bố cục và hình ảnh đồng bộ</h3>
+            <div class="cost-money">3.000.000 VNĐ</div>
+            <p>Thiết kế theme light chuyên nghiệp, phối màu theo nhận diện thương hiệu, layout nhiều section, background riêng và hệ thống trình bày thông tin phù hợp doanh nghiệp thi công.</p>
+          </article>
+
+          <article class="cost-card featured reveal d2">
+            <div class="cost-kicker caps">02 · Lập trình & tối ưu</div>
+            <h3>WordPress CMS, template nội dung và tối ưu trải nghiệm</h3>
+            <div class="cost-money">13.000.000 VNĐ</div>
+            <p>Xây dựng các trang chính, cấu hình quản trị dự án/tin tức/tuyển dụng, form liên hệ, responsive desktop–tablet–mobile, tối ưu tốc độ và SEO kỹ thuật cơ bản.</p>
+          </article>
+
+          <article class="cost-card reveal d3">
+            <div class="cost-kicker caps">03 · Hạ tầng</div>
+            <h3>Tên miền & hosting năm đầu</h3>
+            <div class="cost-money">1.000.000 VNĐ</div>
+            <p>Giá trị hạ tầng vận hành cơ bản cho năm đầu, dùng để công bố website chính thức sau khi nghiệm thu.</p>
+            <span class="gift-pill">Tặng miễn phí 1 năm đầu</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="pages" aria-labelledby="pages-title">
+      <div class="wrap">
+        <div class="section-title reveal">
+          <h2 id="pages-title">Cấu trúc <span class="accent">7 trang</span></h2>
+          <p>Bộ trang tập trung vào năng lực doanh nghiệp, lĩnh vực hoạt động, bằng chứng dự án, cập nhật nội dung và kênh liên hệ rõ ràng.</p>
+        </div>
+
+        <div class="page-grid">
+          <article class="page-card reveal d1">
+            <div class="page-no caps">01</div>
+            <div><h3>Trang chủ</h3><p>Giao diện chuyên nghiệp, hiện đại, phù hợp hình ảnh doanh nghiệp và tạo ấn tượng đầu tiên.</p></div>
+          </article>
+          <article class="page-card reveal d1">
+            <div class="page-no caps">02</div>
+            <div><h3>Giới thiệu</h3><p>Giới thiệu công ty, tầm nhìn, sứ mệnh, giá trị cốt lõi và định vị thương hiệu.</p></div>
+          </article>
+          <article class="page-card reveal d2">
+            <div class="page-no caps">03</div>
+            <div><h3>Lĩnh vực hoạt động</h3><p>Trình bày các dịch vụ hoặc nhóm năng lực chính bằng layout dễ quét thông tin.</p></div>
+          </article>
+          <article class="page-card reveal d2">
+            <div class="page-no caps">04</div>
+            <div><h3>Dự án</h3><p>Danh sách dự án và trang chi tiết dự án, hỗ trợ ảnh, mô tả, quy mô và hạng mục thực hiện.</p></div>
+          </article>
+          <article class="page-card reveal d3">
+            <div class="page-no caps">05</div>
+            <div><h3>Tin tức</h3><p>Danh sách tin tức và trang chi tiết bài viết, phục vụ cập nhật hoạt động và SEO dài hạn.</p></div>
+          </article>
+          <article class="page-card reveal d3">
+            <div class="page-no caps">06</div>
+            <div><h3>Tuyển dụng</h3><p>Trang riêng giới thiệu môi trường làm việc, vị trí tuyển dụng và thông tin ứng tuyển.</p></div>
+          </article>
+          <article class="page-card reveal d4">
+            <div class="page-no caps">07</div>
+            <div><h3>Liên hệ</h3><p>Thông tin liên hệ, bản đồ, form liên hệ và các kênh kết nối chính của doanh nghiệp.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="scope" aria-labelledby="scope-title">
+      <div class="wrap">
+        <div class="section-title reveal">
+          <h2 id="scope-title">Phạm vi <span class="accent">triển khai</span></h2>
+          <p>Trang báo giá nhấn mạnh tính chuyên nghiệp, sự đồng bộ hình ảnh và khả năng cung cấp thông tin hiệu quả cho khách hàng doanh nghiệp.</p>
+        </div>
+
+        <div class="content-panel">
+          <article class="panel reveal d1">
+            <div class="panel-head">
+              <div class="caps muted">Định hướng thiết kế</div>
+              <h3>Theme light, tinh tế, dễ đọc</h3>
+            </div>
+            <ul class="check-list">
+              <li><span><strong>Font chuẩn tiếng Việt</strong>, ưu tiên khả năng đọc tốt trên desktop và mobile.</span></li>
+              <li><span><strong>Bố cục tường minh</strong>, chia rõ từng nhóm thông tin để khách hàng nhanh chóng nắm giá trị.</span></li>
+              <li><span><strong>Hình ảnh & background riêng</strong> cho nhiều section, đồng bộ phong cách nhà thầu thi công.</span></li>
+              <li><span><strong>Màu sắc sáng, chuyên nghiệp</strong>, sử dụng điểm nhấn vừa đủ để tạo cảm giác cao cấp.</span></li>
+            </ul>
+          </article>
+
+          <article class="panel reveal d2">
+            <div class="panel-head">
+              <div class="caps muted">Bao gồm trong gói</div>
+              <h3>Thiết kế, lập trình, tối ưu và bàn giao</h3>
+            </div>
+            <ul class="check-list">
+              <li><span>Tư vấn sitemap, cấu trúc nội dung và định hướng giao diện phù hợp doanh nghiệp.</span></li>
+              <li><span>Dựng website trên <strong>WordPress CMS</strong>, cấu hình trang dự án, tin tức, tuyển dụng và liên hệ.</span></li>
+              <li><span>Tối ưu responsive, tốc độ tải trang cơ bản, SEO kỹ thuật cơ bản và kiểm tra form liên hệ.</span></li>
+              <li><span>Bàn giao tài khoản quản trị, hướng dẫn cập nhật nội dung và hỗ trợ nghiệm thu sau khi website online.</span></li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap" aria-labelledby="roadmap-title">
+      <div class="wrap">
+        <div class="section-title reveal">
+          <h2 id="roadmap-title">Lộ trình <span class="accent">thực hiện</span></h2>
+          <p>Quy trình triển khai được chia thành bốn chặng chính, đủ rõ đầu việc nhưng vẫn tinh gọn để dễ phối hợp và kiểm soát tiến độ.</p>
+        </div>
+
+        <div class="roadmap">
+          <article class="step reveal d1">
+            <div class="step-dot caps">01</div>
+            <div class="step-card">
+              <h3>Khảo sát & định hướng</h3>
+              <p>Thu thập logo, màu thương hiệu, hình ảnh hiện có, nội dung doanh nghiệp, danh sách trang và mục tiêu truyền thông chính.</p>
+              <span class="duration caps">Tuần 1</span>
+            </div>
+          </article>
+
+          <article class="step reveal d2">
+            <div class="step-dot caps">02</div>
+            <div class="step-card">
+              <h3>Thiết kế giao diện</h3>
+              <p>Thiết kế visual direction, trang chủ, layout các trang chính, hệ màu, button, section và background theo phong cách đồng bộ.</p>
+              <span class="duration caps">Tuần 2–3</span>
+            </div>
+          </article>
+
+          <article class="step reveal d3">
+            <div class="step-dot caps">03</div>
+            <div class="step-card">
+              <h3>Lập trình WordPress</h3>
+              <p>Dựng giao diện đã duyệt, cấu hình CMS, template dự án, bài viết, tuyển dụng, form liên hệ, bản đồ và dữ liệu mẫu.</p>
+              <span class="duration caps">Tuần 4–6</span>
+            </div>
+          </article>
+
+          <article class="step reveal d4">
+            <div class="step-dot caps">04</div>
+            <div class="step-card">
+              <h3>Tối ưu & bàn giao</h3>
+              <p>Kiểm thử responsive, tốc độ, SEO cơ bản, bảo mật nền tảng, kết nối tên miền/hosting, hướng dẫn quản trị và nghiệm thu.</p>
+              <span class="duration caps">Tuần 7–8</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="summary" aria-labelledby="summary-title">
+      <div class="wrap">
+        <div class="section-title reveal">
+          <h2 id="summary-title">Tổng kết <span class="accent">báo giá</span></h2>
+          <p>Phần tổng hợp có thể dùng trực tiếp khi gửi khách hàng: rõ tổng chi phí, rõ ưu đãi, rõ phạm vi triển khai.</p>
+        </div>
+
+        <div class="summary-grid">
+          <div class="total-table reveal d1" aria-label="Bảng tổng kết chi phí">
+            <div class="line-row">
+              <span>Thiết kế giao diện, layout section và hình ảnh background đồng bộ</span>
+              <strong>3.000.000 VNĐ</strong>
+            </div>
+            <div class="line-row">
+              <span>Lập trình WordPress CMS, cấu trúc trang, tối ưu responsive, SEO và hiệu năng cơ bản</span>
+              <strong>13.000.000 VNĐ</strong>
+            </div>
+            <div class="line-row gift">
+              <span>Tên miền & hosting năm đầu, giá trị hạ tầng dự kiến</span>
+              <strong>Tặng 1 năm đầu</strong>
+            </div>
+            <div class="line-row">
+              <span>Giá trị tên miền & hosting được ghi nhận trong gói</span>
+              <strong>1.000.000 VNĐ</strong>
+            </div>
+            <div class="line-row">
+              <span>Tổng giá trị triển khai trước ưu đãi</span>
+              <strong>17.000.000 VNĐ</strong>
+            </div>
+            <div class="line-row total">
+              <span class="caps">Khách hàng cần thanh toán</span>
+              <strong>16.000.000 VNĐ</strong>
+            </div>
+          </div>
+
+          <article class="closing reveal d2">
+            <h3>Đề xuất phù hợp cho website doanh nghiệp cần hình ảnh chuyên nghiệp.</h3>
+            <p>
+              Website được xây dựng để trình bày năng lực doanh nghiệp, lĩnh vực hoạt động, dự án tiêu biểu, tin tức, tuyển dụng và kênh liên hệ theo cách rõ ràng. Thiết kế ưu tiên cảm giác sáng, sạch, tin cậy; nội dung dễ quét; hệ thống quản trị đủ đơn giản để đội ngũ vận hành sau bàn giao.
+            </p>
+            <p>
+              Thời gian triển khai dự kiến: <strong>2 tháng</strong>, chia theo từng tuần để có đủ thời gian khảo sát, thiết kế, lập trình, tối ưu và nghiệm thu. Tiến độ có thể điều chỉnh theo tốc độ cung cấp nội dung, số lượng hình ảnh thiết kế riêng và phản hồi chỉnh sửa thực tế.
+            </p>
+            <div class="signature">
+              <small>
+                Báo giá có thể thay đổi nếu phát sinh tính năng đặc thù như đa ngôn ngữ, CRM/ERP, plugin trả phí, sản xuất nội dung SEO số lượng lớn hoặc chụp ảnh/video thực tế.
+              </small>
+              <div class="seal caps">ticchien<br>dev</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
