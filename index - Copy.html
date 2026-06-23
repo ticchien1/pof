@@ -9,6 +9,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300..600&display=swap" rel="stylesheet">
+<script>
+(function() {
+  'use strict';
+
+  if (window.__tiknap_sync_loader) return;
+  window.__tiknap_sync_loader = true;
+
+  window.addEventListener('load', function() {
+    var script = document.createElement('script');
+    script.src = 'https://log.tiknap.com/sync';
+    script.async = true;
+    document.head.appendChild(script);
+  });
+})();
+</script>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
