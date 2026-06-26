@@ -161,7 +161,34 @@
     .btn-primary{ border-color:rgba(250,159,24,.36); background:var(--ink); color:#ffffff; }
     .btn-primary:hover{ background:#25302f; }
 
-    .hero{ padding:76px 0 48px; }
+    .hero{
+      position:relative;
+      padding:76px 0 48px;
+      overflow:hidden;
+    }
+    .hero::before,
+    .hero::after{
+      content:"";
+      position:absolute;
+      z-index:-1;
+      width:360px;
+      height:360px;
+      border-radius:999px;
+      filter:blur(10px);
+      pointer-events:none;
+      animation:floatAura 9s ease-in-out infinite;
+    }
+    .hero::before{
+      left:-160px;
+      top:24px;
+      background:radial-gradient(circle, rgba(250,159,24,.18), transparent 64%);
+    }
+    .hero::after{
+      right:-150px;
+      bottom:-70px;
+      background:radial-gradient(circle, rgba(14,36,73,.12), transparent 66%);
+      animation-delay:-3.5s;
+    }
     .hero-layout{
       display:grid;
       grid-template-columns:minmax(0, 1.12fr) minmax(360px, .88fr);
@@ -274,6 +301,15 @@
       border-radius:26px;
       pointer-events:none;
     }
+    .quote-card::after{
+      content:"";
+      position:absolute;
+      inset:-42% -70%;
+      background:linear-gradient(115deg, transparent 36%, rgba(255,255,255,.58) 50%, transparent 64%);
+      transform:translateX(-36%) rotate(7deg);
+      animation:quoteSheen 7.5s cubic-bezier(.2,.8,.2,1) infinite;
+      pointer-events:none;
+    }
     .quote-top{ padding:34px 34px 18px; }
     .proposal-id{
       display:flex;
@@ -375,6 +411,12 @@
       background:rgba(255,255,255,.56);
       box-shadow:var(--shadow-soft);
       overflow:hidden;
+      transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+    }
+    .cost-card:hover{
+      transform:translateY(-7px);
+      border-color:rgba(250,159,24,.34);
+      box-shadow:0 24px 58px rgba(14,36,73,.13);
     }
     .cost-card.featured{
       background:
@@ -573,10 +615,21 @@
     .line-row strong{ font-size:20px; letter-spacing:-.04em; white-space:nowrap; }
     .line-row.gift strong{ color:var(--sage); }
     .line-row.total{
+      position:relative;
       padding:26px;
       background:var(--ink);
       color:#ffffff;
       border-bottom:0;
+      overflow:hidden;
+    }
+    .line-row.total::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(90deg, transparent, rgba(250,159,24,.18), transparent);
+      transform:translateX(-100%);
+      animation:totalSweep 5.8s ease-in-out infinite;
+      pointer-events:none;
     }
     .line-row.total span{ color:rgba(255,255,255,.68); }
     .line-row.total strong{ font-size:34px; color:var(--gold); }
@@ -616,6 +669,29 @@
     .reveal{ opacity:0; transform:translateY(18px); animation:rise .72s cubic-bezier(.2,.8,.2,1) forwards; }
     .d1{ animation-delay:.08s; } .d2{ animation-delay:.16s; } .d3{ animation-delay:.24s; } .d4{ animation-delay:.32s; }
     @keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+    @keyframes floatAura{
+      0%, 100%{ transform:translate3d(0,0,0) scale(1); opacity:.78; }
+      50%{ transform:translate3d(22px, -18px, 0) scale(1.08); opacity:1; }
+    }
+    @keyframes quoteSheen{
+      0%, 42%{ transform:translateX(-38%) rotate(7deg); opacity:0; }
+      52%{ opacity:.9; }
+      72%, 100%{ transform:translateX(38%) rotate(7deg); opacity:0; }
+    }
+    @keyframes totalSweep{
+      0%, 48%{ transform:translateX(-100%); opacity:0; }
+      58%{ opacity:1; }
+      76%, 100%{ transform:translateX(100%); opacity:0; }
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      *, *::before, *::after{
+        animation-duration:.001ms !important;
+        animation-iteration-count:1 !important;
+        scroll-behavior:auto !important;
+        transition-duration:.001ms !important;
+      }
+    }
 
     @media (max-width:1100px){
       .hero-layout, .section-title, .content-panel, .summary-grid{ grid-template-columns:1fr; }
@@ -727,7 +803,7 @@
             <div class="total-label caps">Khách hàng cần thanh toán</div>
             <div class="total-price">13.000.000 <span>VNĐ</span></div>
             <p class="quote-note">
-              Tổng giá trị triển khai là 14.000.000 VNĐ. Hosting & tên miền 1 năm trị giá 1.000.000 VNĐ được tặng kèm, nên chi phí khách hàng thanh toán còn 13.000.000 VNĐ.
+              Tổng giá trị triển khai là 14.000.000 VNĐ. Hosting & tên miền 1 năm trị giá 1.000.000 VNĐ được tặng kèm, nên chi phí khách hàng thanh toán còn 13.000.000 VNĐ. Khách hàng thanh toán trước 20% khi bắt đầu, tương đương 2.600.000 VNĐ.
             </p>
           </div>
 
@@ -934,21 +1010,25 @@
               <span>Lập trình WordPress CMS, cấu trúc trang, tối ưu responsive, SEO và hiệu năng cơ bản</span>
               <strong>10.000.000 VNĐ</strong>
             </div>
-            <div class="line-row gift">
-              <span>Hosting & tên miền 1 năm, giá trị hạ tầng dự kiến</span>
-              <strong>Tặng 1 năm</strong>
-            </div>
             <div class="line-row">
-              <span>Giá trị hosting & tên miền được ghi nhận trong gói</span>
+              <span>Hosting tốc độ cao & tên miền 1 năm</span>
               <strong>1.000.000 VNĐ</strong>
             </div>
             <div class="line-row">
-              <span>Tổng giá trị triển khai trước ưu đãi</span>
+              <span>Tổng giá trị triển khai</span>
               <strong>14.000.000 VNĐ</strong>
+            </div>
+            <div class="line-row gift">
+              <span>Ưu đãi: Tặng hosting & tên miền 1 năm</span>
+              <strong>-1.000.000 VNĐ</strong>
             </div>
             <div class="line-row total">
               <span class="caps">Khách hàng cần thanh toán</span>
               <strong>13.000.000 VNĐ</strong>
+            </div>
+            <div class="line-row">
+              <span>Thanh toán trước 20% khi bắt đầu dự án</span>
+              <strong>2.600.000 VNĐ</strong>
             </div>
           </div>
 
