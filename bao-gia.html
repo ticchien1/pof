@@ -595,34 +595,87 @@
       align-items:stretch;
     }
     .total-table{
-      border:1px solid rgba(250,159,24,.14);
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      border:1px solid rgba(250,159,24,.16);
       border-radius:32px;
       overflow:hidden;
       background:
-        radial-gradient(460px 260px at 100% 0%, rgba(14,36,73,.10), transparent 64%),
-        rgba(255,255,255,.68);
+        radial-gradient(520px 280px at 100% 0%, rgba(14,36,73,.10), transparent 64%),
+        rgba(255,255,255,.72);
       box-shadow:var(--shadow);
     }
-    .line-row{
+    .table-head{
+      padding:26px 28px 22px;
+      border-bottom:1px solid rgba(250,159,24,.18);
+      background:rgba(255,255,255,.4);
+    }
+    .table-head .caps{ color:var(--brand); }
+    .table-head h3{
+      margin:8px 0 0;
+      font-size:24px;
+      letter-spacing:-.045em;
+      line-height:1.18;
+    }
+    .table-body{
+      display:flex;
+      flex-direction:column;
+    }
+    .ledger-group{
+      padding:14px 28px;
+      border-bottom:1px solid rgba(250,159,24,.18);
+    }
+    .ledger-group:last-child{ border-bottom:0; }
+    .group-label{
+      display:block;
+      margin-bottom:10px;
+      color:var(--soft);
+    }
+    .ledger-row{
       display:grid;
       grid-template-columns:1fr auto;
-      gap:22px;
-      align-items:center;
-      padding:20px 26px;
-      border-bottom:1px solid rgba(250,159,24,.20);
+      gap:18px;
+      align-items:baseline;
+      padding:10px 0;
     }
-    .line-row span{ color:var(--muted); line-height:1.5; }
-    .line-row strong{ font-size:20px; letter-spacing:-.04em; white-space:nowrap; }
-    .line-row.gift strong{ color:var(--sage); }
-    .line-row.total{
+    .ledger-row + .ledger-row{ border-top:1px dashed rgba(14,36,73,.08); }
+    .ledger-row span{
+      color:var(--muted);
+      line-height:1.55;
+      font-size:14.5px;
+    }
+    .ledger-row strong{
+      font-size:17px;
+      letter-spacing:-.025em;
+      color:var(--ink);
+      white-space:nowrap;
+      font-variant-numeric:tabular-nums;
+    }
+    .ledger-row.subtotal{
+      padding:14px 0 4px;
+    }
+    .ledger-row.subtotal span{
+      color:var(--ink);
+      font-weight:600;
+    }
+    .ledger-row.subtotal strong{
+      font-size:19px;
+    }
+    .ledger-row.discount span{ color:var(--brand-dark); }
+    .ledger-row.discount strong{ color:var(--sage); }
+    .grand-row{
       position:relative;
-      padding:26px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:18px;
+      align-items:center;
+      padding:26px 28px;
       background:var(--ink);
-      color:#ffffff;
-      border-bottom:0;
+      color:#fff;
       overflow:hidden;
     }
-    .line-row.total::after{
+    .grand-row::after{
       content:"";
       position:absolute;
       inset:0;
@@ -631,8 +684,74 @@
       animation:totalSweep 5.8s ease-in-out infinite;
       pointer-events:none;
     }
-    .line-row.total span{ color:rgba(255,255,255,.68); }
-    .line-row.total strong{ font-size:34px; color:var(--gold); }
+    .grand-row .grand-label{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .grand-row .grand-label small{
+      color:rgba(255,255,255,.62);
+      font-size:11px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:700;
+    }
+    .grand-row .grand-label b{
+      font-size:18px;
+      font-weight:700;
+      letter-spacing:-.02em;
+      color:#fff;
+    }
+    .grand-row .grand-value{
+      font-size:34px;
+      font-weight:800;
+      letter-spacing:-.04em;
+      color:var(--gold);
+      font-variant-numeric:tabular-nums;
+      white-space:nowrap;
+    }
+    .deposit-row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:18px;
+      align-items:center;
+      padding:18px 28px;
+      background:rgba(250,159,24,.08);
+      border-top:1px solid rgba(250,159,24,.22);
+    }
+    .deposit-row .deposit-label{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      color:var(--muted);
+      font-size:13.5px;
+      line-height:1.55;
+    }
+    .deposit-row .deposit-label b{
+      color:var(--ink);
+      font-weight:700;
+      font-size:14px;
+      letter-spacing:-.01em;
+    }
+    .deposit-row .deposit-value{
+      font-size:20px;
+      font-weight:800;
+      letter-spacing:-.03em;
+      color:var(--brand-dark);
+      font-variant-numeric:tabular-nums;
+      white-space:nowrap;
+    }
+    .deposit-row .deposit-value em{
+      display:block;
+      font-style:normal;
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--soft);
+      text-align:right;
+      margin-bottom:2px;
+    }
     .closing{
       min-height:100%;
       padding:32px;
@@ -717,8 +836,10 @@
       .section-title{ gap:16px; }
       .cost-card, .panel-head, .closing{ padding:22px; }
       .check-list li{ padding:15px 22px; }
-      .line-row{ grid-template-columns:1fr; gap:8px; }
-      .line-row strong{ white-space:normal; }
+      .ledger-row{ grid-template-columns:1fr; gap:8px; }
+      .ledger-row strong{ white-space:normal; }
+      .grand-row{ grid-template-columns:1fr; gap:12px; }
+      .deposit-row{ grid-template-columns:1fr; gap:10px; }
       .signature{ grid-template-columns:1fr; }
     }
 
@@ -740,7 +861,7 @@
       .total-price{ font-size:54px; }
       .cost-grid, .page-grid, .roadmap{ grid-template-columns:1fr 1fr; }
       .roadmap::before{ display:none; }
-      .line-row.total{ background:#111 !important; color:#fff; }
+      .grand-row{ background:#111 !important; color:#fff; }
       a[href]::after{ content:""; }
     }
   </style>
@@ -1002,34 +1123,67 @@
 
         <div class="summary-grid">
           <div class="total-table reveal d1" aria-label="Bảng tổng kết chi phí">
-            <div class="line-row">
-              <span>Thiết kế giao diện, layout section và hình ảnh background đồng bộ</span>
-              <strong>3.000.000 VNĐ</strong>
+
+            <div class="table-head">
+              <div class="caps">Tổng kết chi phí</div>
+              <h3>Chi tiết hạng mục & thanh toán</h3>
             </div>
-            <div class="line-row">
-              <span>Lập trình WordPress CMS, cấu trúc trang, tối ưu responsive, SEO và hiệu năng cơ bản</span>
-              <strong>10.000.000 VNĐ</strong>
+
+            <div class="table-body">
+              <div class="ledger-group">
+                <span class="group-label caps">Hạng mục triển khai</span>
+                <div class="ledger-row">
+                  <span>Lập trình Website tổng thể</span>
+                  <strong>13.000.000 VNĐ</strong>
+                </div>
+                <!-- <div class="ledger-row">
+                  <span>Hosting tốc độ cao & tên miền 1 năm</span>
+                  <strong>1.000.000 VNĐ</strong>
+                </div> -->
+              </div>
+
+              <div class="ledger-group">
+                <span class="group-label caps">Tính toán</span>
+                <!-- <div class="ledger-row subtotal">
+                  <span>Tổng giá trị triển khai</span>
+                  <strong>14.000.000 VNĐ</strong>
+                </div> -->
+                <div class="ledger-row discount">
+                  <span>Ưu đãi: Tặng hosting & tên miền 1 năm</span>
+                  <strong>−1.000.000 VNĐ</strong>
+                </div>
+              </div>
             </div>
-            <div class="line-row">
-              <span>Hosting tốc độ cao & tên miền 1 năm</span>
-              <strong>1.000.000 VNĐ</strong>
+
+            <div class="grand-row">
+              <div class="grand-label">
+                <small>Khách hàng cần thanh toán</small>
+                <b>Tổng thanh toán</b>
+              </div>
+              <div class="grand-value">13.000.000 VNĐ</div>
             </div>
-            <div class="line-row">
-              <span>Tổng giá trị triển khai</span>
-              <strong>14.000.000 VNĐ</strong>
+
+            <div class="deposit-row">
+              <div class="deposit-label">
+                <b>Thanh toán trước 20% khi bắt đầu dự án</b>
+                Đặt cọc để chốt lịch và bắt đầu khảo sát thiết kế.
+              </div>
+              <div class="deposit-value">
+                <em>Đặt cọc</em>
+                2.600.000 VNĐ
+              </div>
             </div>
-            <div class="line-row gift">
-              <span>Ưu đãi: Tặng hosting & tên miền 1 năm</span>
-              <strong>-1.000.000 VNĐ</strong>
+            <div class="deposit-row">
+              <div class="deposit-label">
+                <b>Thanh toán 80% khi bàn giao dự án</b>
+               
+              </div>
+              <div class="deposit-value">
+                <em>Thanh toán</em>
+                10.400.000 VNĐ
+              </div>
             </div>
-            <div class="line-row total">
-              <span class="caps">Khách hàng cần thanh toán</span>
-              <strong>13.000.000 VNĐ</strong>
-            </div>
-            <div class="line-row">
-              <span>Thanh toán trước 20% khi bắt đầu dự án</span>
-              <strong>2.600.000 VNĐ</strong>
-            </div>
+
           </div>
 
           <article class="closing reveal d2">
